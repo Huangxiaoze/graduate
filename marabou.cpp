@@ -26,6 +26,15 @@ void Marabou::connect_S_L() {
     connect(this->ui->importNetwork, SIGNAL(clicked()), this, SLOT(on_import_network()));
     connect(this->ui->run_abstract, SIGNAL(clicked()), this, SLOT(on_run_abstract()));
     connect(this->ui->abstraction_sequence_slider, SIGNAL(valueChanged(int)), this, SLOT(on_as_slider_valueChange(int)));
+    connect(this->ui->ar_checkbox, SIGNAL(stateChanged(int)), this, SLOT(on_ar_status(int)));
+}
+
+void Marabou::on_ar_status(int s) {
+    qDebug() << "changeStatus " << this->ui->ar_checkbox->isChecked() << endl;
+    bool checked = this->ui->ar_checkbox->isChecked();
+    this->ui->run_abstract->setDisabled(!checked);
+    this->ui->refine_next->setDisabled(!checked);
+    this->ui->refine_finish->setDisabled(!checked);
 }
 
 void Marabou::on_import_network() {

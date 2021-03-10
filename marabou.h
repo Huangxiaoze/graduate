@@ -24,6 +24,7 @@ public slots:
     void on_import_network();
     void on_run_abstract();
     void on_as_slider_valueChange(int);
+    void on_ar_status(int);
 private:
     void connect_S_L();
     Ui::Marabou *ui;

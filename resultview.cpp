@@ -180,12 +180,11 @@ void ResultView::parsingJsonFile(QString jsonFile)
 
 
 // huangxiaoze--start
-void ResultView::on_show_network_file(QString jsonFile)
+void ResultView::on_show_network_file(QString network_filepath)
 {
 //    return;
-    jsonFile = "/home/xiaoze/Desktop/artifact/CEGAR_NN/network.before.json";
-    qDebug() << "ResultView::on_show_network: jsonFile = " << jsonFile << endl;
-    QJsonObject * jsonObj = Util::parseJsonFile_python(jsonFile);//Util::parseJsonFile(jsonFile);
+    qDebug() << "ResultView::on_show_network: jsonFile = " << network_filepath << endl;
+    QJsonObject * jsonObj = Util::parseJsonFile_python(network_filepath);//Util::parseJsonFile(jsonFile);
     this->showNetwork(jsonObj);
 }
 

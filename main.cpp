@@ -1,16 +1,30 @@
 #include <Python.h>
 #include "mainui.h"
+#include "init_python.h"
 
 #include <QApplication>
 #include <QDir>
 #include <QMessageBox>
 #include <QDebug>
 #include <QResource>
+#include <QSplashScreen>
+#include <QPixmap>
 
+Python python("");
 int main(int argc, char *argv[])
 {
-    Py_Initialize();
     QApplication a(argc, argv);
+    QSplashScreen splash(QPixmap(":/resources/loading.gif"));
+    splash.showMessage("Loading...");
+    splash.show();
+    Py_Initialize();
+    python.importModule("core.nnet.read_nnet");
+    python.importModule("core.prodeep.prodeep");
+    python.importFunc("core.nnet.read_nnet", "network_from_nnet_file");
+    python.importFunc("core.nnet.read_nnet", "get_network_in_json_str");
+    python.importFunc("core.prodeep.prodeep", "abstract");
+
+    qDebug() << "here" << endl;
 
     QDir tmpPath = QDir::tempPath();
 
@@ -57,7 +71,9 @@ int main(int argc, char *argv[])
     }*/
 
     MainUI w;
+    splash.finish(&w);
     w.showMaximized();
+
     int ret = a.exec();
     Py_Finalize();
     return ret;

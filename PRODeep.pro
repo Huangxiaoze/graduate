@@ -64,6 +64,7 @@ HEADERS += \
     file.h \
     graphwidget.h \
     highlighter.h \
+    init_python.h \
     loadingwidget.h \
     mainui.h \
     marabou.h \

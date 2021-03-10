@@ -12,6 +12,7 @@
 #include <QDialog>
 #include <QLabel>
 #include "util.h"
+#include "init_python.h"
 
 MainUI::MainUI(QWidget *parent) :
     QMainWindow(parent),
@@ -137,23 +138,10 @@ void MainUI::initUI()
 // huangxiaoze -- start
 
 void MainUI::on_run_abstract(QJsonObject parameter) {
-    qDebug() << "MainUI::on_run_abstract" << endl;
-    QStringList keys = parameter.keys();
-    qDebug() << parameter << endl;
-
-//    Py_Initialize();
-    PyRun_SimpleString("print('----MainUI Python start----')");
     PyRun_SimpleString("import sys");
     PyRun_SimpleString("sys.path.append('./')");
-    PyObject *core_nnet_read_nnet = PyImport_ImportModule("core.nnet.read_nnet");
-    PyObject *prodeep = PyImport_ImportModule("core.prodeep.prodeep");
-    if (prodeep == nullptr) {
-        qDebug() << "prodeep is null" << endl;
-        return;
-    } else {
-        qDebug() << "prodeep import success" << endl;
-    }
-    PyObject *abstract = PyObject_GetAttrString(prodeep, "abstract");
+
+    PyObject *abstract = python.getFunc("core.prodeep.prodeep", "abstract");
     if (abstract == nullptr) {
         qDebug() << "abstract is null" << endl;
         return;
@@ -175,17 +163,13 @@ void MainUI::on_run_abstract(QJsonObject parameter) {
     }
     PyObject *net = PyEval_CallObject(abstract, arg);
 
-    PyObject *pFunc2 = PyObject_GetAttrString(core_nnet_read_nnet, "get_network_in_json_str");
+    PyObject *pFunc2 = python.getFunc("core.nnet.read_nnet", "get_network_in_json_str");
     PyObject *pArg2 = Py_BuildValue("(O)", net);
     PyObject *str = PyEval_CallObject(pFunc2, pArg2);
     char *content = NULL;
     PyArg_Parse(str,"s", &content);
 
     QString value = content;
-
-    qDebug() << "value is : " << value << endl;
-
-//    Py_Finalize();
 
     QJsonParseError parseJsonErr;
     QJsonDocument document = QJsonDocument::fromJson(value.toUtf8(),&parseJsonErr);

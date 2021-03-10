@@ -1,8 +1,11 @@
 #include <Python.h>
 #include "util.h"
+#include "init_python.h"
 #include "projectview.h"
 #include <QDir>
 #include <QDebug>
+
+extern Python python;
 
 Util::Util()
 {
@@ -59,35 +62,20 @@ QJsonObject * Util::parseJsonFile(const QString fileName)
 }
 
 QJsonObject* Util::parseJsonFile_python(const QString fileName) {
-    //初始化python
-//    Py_Initialize();
-
-    //直接运行python代码
-    PyRun_SimpleString("print('----------Python Start')");
-
-    //引入当前路径,否则下面模块不能正常导入
     PyRun_SimpleString("import sys");
     PyRun_SimpleString("sys.path.append('./')");
 
-    //引入模块
-    PyRun_SimpleString("print('----------PyImport_ImportModule')");
-
-    PyObject *core_nnet_read_nnet = PyImport_ImportModule("core.nnet.read_nnet");
-
-    PyObject *pFunc1 = PyObject_GetAttrString(core_nnet_read_nnet, "network_from_nnet_file");
-    PyObject *pArg1 = Py_BuildValue("(s)", "../../nnet/ACASXU_run2a_1_1_batch_2000.nnet");
+    PyObject *pFunc1 = python.getFunc("core.nnet.read_nnet", "network_from_nnet_file");
+    PyObject *pArg1 = Py_BuildValue("(s)", fileName.toStdString().c_str());
     PyObject *net = PyEval_CallObject(pFunc1, pArg1);
 
-    PyObject *pFunc2 = PyObject_GetAttrString(core_nnet_read_nnet, "get_network_in_json_str");
+    PyObject *pFunc2 = python.getFunc("core.nnet.read_nnet", "get_network_in_json_str");
     PyObject *pArg2 = Py_BuildValue("(O)", net);
     PyObject *str = PyEval_CallObject(pFunc2, pArg2);
     char *content = NULL;
     PyArg_Parse(str,"s", &content);
 
     QString value = content;
-
-    //释放python
-//    Py_Finalize();
     QJsonParseError parseJsonErr;
     QJsonDocument document = QJsonDocument::fromJson(value.toUtf8(),&parseJsonErr);
     if(!(parseJsonErr.error == QJsonParseError::NoError))
