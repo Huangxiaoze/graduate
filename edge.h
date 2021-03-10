@@ -12,7 +12,7 @@ class Node;
 class Edge : public QGraphicsItem
 {
 public:
-    Edge(Node *sourceNode, Node *destNode, int layertype=EDGE_TYPE_NEURON);
+    Edge(Node *sourceNode, Node *destNode, int edgetype=EDGE_TYPE_NEURON);
 
     Node *sourceNode() const;
     Node *destNode() const;
@@ -24,7 +24,9 @@ public:
 
 protected:
     QRectF boundingRect() const override;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+    void paint(QPainter *painter,
+               const QStyleOptionGraphicsItem *option,
+               QWidget *widget) override;
 
 private:
     Node *source, *dest;

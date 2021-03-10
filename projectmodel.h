@@ -17,7 +17,8 @@ public:
     void closeProject(int row);
 
     // Header:
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+    QVariant headerData(int section, Qt::Orientation orientation,
+                        int role = Qt::DisplayRole) const override;
 
     // Basic functionality:
     QModelIndex index(int row, int column,
@@ -30,7 +31,6 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-
     int addFile(ProjectItem * file,QString suffix);
     int addTool(ProjectItem * tool);
     int removeTool(ProjectItem * tool);
@@ -38,7 +38,7 @@ public:
     QString getSelectTreeNodeName(const QModelIndex &index) const;
     int getSelectTreeNodeType(const QModelIndex &index) const;
 private:
-    TreeNode *rootItem;
+    TreeNode* rootItem;
     int currentProject=-1;
     QList<Project*> projects;
 

@@ -18,7 +18,7 @@ public:
 
     void appendChild(TreeNode *child);
     void removeChild(int row);
-    TreeNode *child(int row);
+    TreeNode* child(int row);
     int childCount() const;
     int columnCount() const;
     QVariant data(int column) const;
@@ -27,15 +27,15 @@ public:
     bool insertChildren(int position, int count,  QList<ProjectItem *> pI);
     bool insertColumns(int position,  int columns);
     int row() const;
-    TreeNode *parent();
+    TreeNode* parent();
     int getType();
 public slots:
     void addModel(const QString & fileName);
 private:
     QVector<TreeNode*> m_childItems;
-    ProjectItem* m_itemData;
     TreeNode *m_parentItem;
     int type;
+    ProjectItem* m_itemData;
 };
 
 #endif // TREENODE_H

@@ -1,6 +1,7 @@
 #ifndef MAINUI_H
 #define MAINUI_H
 
+#include <Python.h>
 #include <QMainWindow>
 #include <QSplitter>
 
@@ -31,7 +32,7 @@
 #define RELUPLEX_WITH_DEEPSYMBOL_BACKEND (std::string(Reluplex_ROOT)+std::string("/check_properties/adversarial/adversarialBOXSym.elf")).c_str()
 
 #define PLANET_BACKEND (std::string("python2 ")+std::string(PLANET_DIR)+std::string("/prodNetwork.py")).c_str()
-
+#define MARABOU_BACKEND std::string("python3").c_str()
 namespace Ui {
 class MainUI;
 }
@@ -46,17 +47,19 @@ public:
 
 protected:
     void closeEvent(QCloseEvent *event) override;
-
+    void keyPressEvent(QKeyEvent *event) override;
 private slots:
     void on_action_New_Project_triggered();
-
     void on_action_Open_Project_triggered();
-
     void on_actionClose_Project_triggered();
+    void on_actionRun_triggered();
+    void on_actionAdd_Tool_triggered();
+    void on_actionRemove_Tool_triggered();
+    void on_actionImport_Network_triggered();
+    void on_actionImport_Input_triggered();
 
     void on_readoutput(char * out);
 
-    void on_actionRun_triggered();
 
     void verifyFinished(int exitCode);
     void batchverifyFinished(int exitCode);
@@ -72,13 +75,6 @@ private slots:
     void run_reluplex(int timeout,bool withDeepsymbol,const QString parameters);
     void run_planet(const QString args);
 
-    void on_actionAdd_Tool_triggered();
-
-    void on_actionRemove_Tool_triggered();
-
-    void on_actionImport_Network_triggered();
-
-    void on_actionImport_Input_triggered();
 
     void on_updateProgramOut(const QString out);
 
@@ -86,6 +82,9 @@ private slots:
     void on_Run_DeepG(const QString binpath,const QString configdir);
     void on_Run_ERAN(const QString network,const QString dataset,const QString configdir,int paramnum,int inputnum);
 
+    // huangxiaoze --- start
+    void on_run_abstract(QJsonObject);
+    // huangxiaoze --- end
 
 private:
     Ui::MainUI * ui;
@@ -97,7 +96,13 @@ private:
     int verifiednum,robustnum,curbatch=0;    
 
 
-    BackEnd * backend,*deepgbackend,*eranbackend,*eranrawbackend,*reluplexbackend,*planetbackend;
+    BackEnd *backend,
+            *deepgbackend,
+            *eranbackend,
+            *eranrawbackend,
+            *reluplexbackend,
+            *planetbackend,
+            *maraboubackend;
 
     void initUI();
     void parsingbatchout();

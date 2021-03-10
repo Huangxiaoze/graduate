@@ -1,0 +1,21 @@
+--------------------------------------------------------------------------------parameters:--------------------------------------------------------------------------------
+net_number: 5_7
+property_id: basic_2
+mechanism: marabou_with_ar
+abstraction_type: complete
+refinement_type: cegar
+abstraction_sequence: 100
+refinement_sequence: 50
+results_directory: /home/xiaoze/Desktop/artifact/CEGAR_NN/experiments/dev_exp_results_archive
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++results:++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+net_name: ACASXU_run2a_5_7_batch_2000.nnet
+property_id: basic_2
+abstraction_time: 5.569916725158691
+query_result: UNSAT
+num_of_refine_steps: 0
+total_ar_query_time: 5.741413354873657
+ar_times: [0.17136192321777344]
+ar_sizes: [78]
+refine_sequence_times: []
+last_net_data: {"layer_sizes": {"0": 5, "1": 50, "2": 4, "3": 4, "4": 4, "5": 4, "6": 2, "7": 5}, "num_nodes": 78, "num_layers": 8, "num_hidden_layers": 6}
+last_query_time: 0.171494722366333

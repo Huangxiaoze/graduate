@@ -21,7 +21,10 @@ class NetworkLayer : public QWidget
     Q_OBJECT
 
 public:
-    explicit NetworkLayer(QString name,QString layerType,int flag =15, QStringList * inputName = nullptr, QStringList * outputName = nullptr, QWidget *parent = nullptr);
+    explicit NetworkLayer(QString name,QString layerType,int flag =15,
+                          QStringList * inputName = nullptr,
+                          QStringList * outputName = nullptr,
+                          QWidget *parent = nullptr);
     ~NetworkLayer();
 
     void setWeight(int row, int column, QString value);
@@ -34,11 +37,9 @@ public:
     void setDescription(QString description);
 
     void setInputNodeStatus(int index, int status);
-    void setOutputNodeStatus(int index, int status);
     void setInputNodeStatus(QString name, int status);
+    void setOutputNodeStatus(int index, int status);
     void setOutputNodeStatus(QString name, int status);
-
-
 
     void saveLayer(QFile & file, int index);
     QString getLayerType();

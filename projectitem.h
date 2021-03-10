@@ -4,9 +4,13 @@
 #include<QVariant>
 #include<QList>
 
+
+// ProjectItem(item1->item2->item3->....)
+
 class ProjectItem
 {
 private:
+    // 链表头结点
     QList<QVariant> * column = new QList<QVariant>();
 public:
     ProjectItem();

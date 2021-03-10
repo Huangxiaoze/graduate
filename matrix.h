@@ -13,17 +13,19 @@ class Matrix : public QWidget
     Q_OBJECT
 
 public:
-    explicit Matrix(const QString name, QStringList * rowHeadName = nullptr, QStringList * columnHeadName = nullptr, bool isSetDefaultHeadName=true,QWidget *parent = nullptr);
+    explicit Matrix(const QString name, QStringList * rowHeadName = nullptr,
+                    QStringList * columnHeadName = nullptr,
+                    bool isSetDefaultHeadName=true,QWidget *parent = nullptr);
     ~Matrix();
 
     int setName(QString name);
     int setDescription(QString description);
     int setData(QString ** vecs, int rowNumber, int columnNumber);
-    int insertItem(int row,int column, QString value);
+    int insertItem(int row, int column, QString value);
     int insertRow(QString rowName, QString * value = nullptr);
-    int insertColumn(QString columnName, QString * value = nullptr);
+    int insertColumn(QString columnName, QString* value = nullptr);
 
-    void setItemColor(int row,int column,QColor color);
+    void setItemColor(int row, int column, QColor color);
 
     int getRowNumber();
     int getColumnNumber();

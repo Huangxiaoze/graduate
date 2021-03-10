@@ -35,7 +35,7 @@ NetworkLayer::NetworkLayer(QString name, QString layerType,int flag,QStringList 
         this->weight = new Matrix("Weight", outputName,inputName);
         this->weight->hide();
         connect(this->weight,SIGNAL(onValueChanged()),this,SLOT(onWeightViewChanged()));
-        this->ui->V_1_2->addWidget(this->weight,3);
+        this->ui->V_1_2->addWidget(this->weight, 3);
         this->ui->weightButton->show();
     }
     if(((flag >>2) & 1) == 1)
@@ -122,12 +122,13 @@ void NetworkLayer::onBiasViewChanged()
 }
 void NetworkLayer::onOutputViewChanged()
 {
-    qDebug() << "uotput";
+    qDebug() << "output";
 }
 
 
 void NetworkLayer::saveLayer(QFile & file, int index)
 {
+    qDebug() << "NetworkLayer::saveLayer " << file.fileName();
     if(!file.isOpen())
     {
         qDebug() << file.fileName() << "is not open";
@@ -284,23 +285,18 @@ void NetworkLayer::setInputNodeStatus(int index, int status)
 {
     if(!this->input ) return;
     QColor  color;
-    if(status == NODE_STATUS_ACTIVE){
-        color = Qt::green;
-    }
-    else if(status == NODE_STATUS_UNKNOWN){
-        color = Qt::yellow;
-    }
-    else if (status == NODE_STATUS_UNACTIVE) {
-        color = Qt::red;
-    }
-    else if(status ==NODE_STATUS_CLEAR)
-    {
-        color = Qt::white;
-    }
-    else
-    {
+    switch (status) {
+    case NODE_STATUS_ACTIVE:
+        color = Qt::green;break;
+    case NODE_STATUS_UNKNOWN:
+        color = Qt::yellow;break;
+    case NODE_STATUS_UNACTIVE:
+        color = Qt::red;break;
+    case NODE_STATUS_CLEAR:
+        color = Qt::white;break;
+    default:
         qDebug() << "Can not found this kind of status code:"<< status;
-            return;
+        return;
     }
     if(this->input->isSetColumnHeadName())
     {
@@ -318,23 +314,18 @@ void NetworkLayer::setOutputNodeStatus(int index, int status)
     if(!this->output ) return;
     if(flag == 1) return;
     QColor  color;
-    if(status == NODE_STATUS_ACTIVE){
-        color = Qt::green;
-    }
-    else if(status == NODE_STATUS_UNKNOWN){
-        color = Qt::yellow;
-    }
-    else if (status == NODE_STATUS_UNACTIVE) {
-        color = Qt::red;
-    }
-    else if(status ==NODE_STATUS_CLEAR)
-    {
-        color = Qt::white;
-    }
-    else
-    {
+    switch (status) {
+    case NODE_STATUS_ACTIVE:
+        color = Qt::green;break;
+    case NODE_STATUS_UNKNOWN:
+        color = Qt::yellow;break;
+    case NODE_STATUS_UNACTIVE:
+        color = Qt::red;break;
+    case NODE_STATUS_CLEAR:
+        color = Qt::white;break;
+    default:
         qDebug() << "Can not found this kind of status code:"<< status;
-            return;
+        return;
     }
     if(this->output->isSetColumnHeadName())
     {
@@ -350,7 +341,7 @@ void NetworkLayer::setOutputNodeStatus(int index, int status)
 
 void NetworkLayer::setWeight(int row, int column, QString value)
 {
-    this->weight->insertItem(row,column,value);
+    this->weight->insertItem(row, column, value);
 }
 void NetworkLayer::setInput(QString name, QString inf,QString sup)
 {

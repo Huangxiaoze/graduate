@@ -35,7 +35,7 @@ void Node::addEdge(Edge *edge)
 
 void Node::resetGroundTruth()
 {
-    this->isGroundtruth=false;
+    this->isGroundtruth = false;
 }
 
 QList<Edge *> Node::edges() const
@@ -118,9 +118,14 @@ bool Node::advancePosition()
 QRectF Node::boundingRect() const
 {
     qreal adjust = 2;
-    if(this->nodeType==NODE_TYPE_NEURON)return QRectF( -10 - adjust, -10 - adjust, 23 + adjust, 23 + adjust);
-    if(this->nodeType==NODE_TYPE_LAYER)return QRectF(-20 - adjust, -30 - adjust , 43+ adjust, 63+ adjust);
-    return QRectF(-20 - adjust, -30 - adjust , 43+ adjust, 63+ adjust);
+    switch (this->nodeType) {
+    case NODE_TYPE_NEURON:
+        return QRectF( -10 - adjust, -10 - adjust, 23 + adjust, 23 + adjust);
+    case NODE_TYPE_LAYER:
+        return QRectF(-20 - adjust, -30 - adjust , 43+ adjust, 63+ adjust);
+    default:
+        return QRectF(-20 - adjust, -30 - adjust , 43+ adjust, 63+ adjust);
+    }
 }
 //! [8]
 
@@ -128,8 +133,16 @@ QRectF Node::boundingRect() const
 QPainterPath Node::shape() const
 {
     QPainterPath path;
-    if(this->nodeType==NODE_TYPE_NEURON)path.addEllipse(-10, -10, 20, 20);
-    if(this->nodeType==NODE_TYPE_LAYER)path.addRect(-20, -30, 40, 60);
+    switch (this->nodeType) {
+    case NODE_TYPE_LAYER:
+        path.addRect(-20, -30, 40, 60);
+        break;
+    case NODE_TYPE_NEURON:
+        path.addEllipse(-10, -10, 20, 20);
+        break;
+    default:
+        break;
+    }
     return path;
 }
 //! [9]
@@ -141,17 +154,27 @@ void Node::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
     {
         painter->setPen(Qt::NoPen);
         painter->setBrush(Qt::darkGray);
-        painter->drawEllipse(-7, -7, 20, 20);
+        painter->drawEllipse(-7, -7, 20, 20); // shadow
 
         QRadialGradient gradient(-3, -3, 10);
         if (option->state & QStyle::State_Sunken) {
             gradient.setCenter(3, 3);
             gradient.setFocalPoint(3, 3);
-            if(!this->isGroundtruth)gradient.setColorAt(1, QColor(Qt::yellow).lighter(120));else gradient.setColorAt(1, QColor(Qt::green).lighter(120));
-            if(!this->isGroundtruth)gradient.setColorAt(0, QColor(Qt::darkYellow).lighter(120));else gradient.setColorAt(0, QColor(Qt::darkGreen).lighter(120));
+            if (!this->isGroundtruth) {
+                gradient.setColorAt(1, QColor(Qt::yellow).lighter(120));
+                gradient.setColorAt(0, QColor(Qt::darkYellow).lighter(120));
+            } else {
+                gradient.setColorAt(1, QColor(Qt::green).lighter(120));
+                gradient.setColorAt(0, QColor(Qt::darkGreen).lighter(120));
+            }
         } else {
-            if(!this->isGroundtruth)gradient.setColorAt(0, Qt::yellow);else gradient.setColorAt(0, Qt::green);
-            if(!this->isGroundtruth)gradient.setColorAt(1, Qt::darkYellow);else gradient.setColorAt(1, Qt::darkGreen);
+            if (!this->isGroundtruth) {
+                gradient.setColorAt(0, Qt::yellow);
+                gradient.setColorAt(1, Qt::darkYellow);
+            } else {
+                gradient.setColorAt(0, Qt::green);
+                gradient.setColorAt(1, Qt::darkGreen);
+            }
         }
         painter->setBrush(gradient);
 
@@ -215,7 +238,6 @@ void Node::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     if(this->nodeType==NODE_TYPE_LAYER)
     {
         QStringList list=this->name.split("\n");
-        //qDebug()<<list;
         this->graph->showlayer(list[0].toInt()-1);
     }
 }

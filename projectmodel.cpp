@@ -8,7 +8,7 @@ ProjectModel::ProjectModel( QObject *parent)
     rootItem = new TreeNode(new Project("Project"), PROJECT_NODE);
     //setupModelData(data.split('\n'), rootItem);
 }
- ProjectModel::~ProjectModel()
+ProjectModel::~ProjectModel()
 {
 
 }
@@ -27,6 +27,7 @@ void ProjectModel::addProject(Project * project)
 
     this->projects.append(project);
     this->currentProject = this->projects.size()-1;
+    qDebug() << "==>[ProjectModel::addProject] currentProject = " << this->currentProject << endl;
 }
 void ProjectModel::closeProject(int row)
 {
@@ -35,8 +36,9 @@ void ProjectModel::closeProject(int row)
     this->endRemoveRows();
     this->projects.removeAt(row);
     this->currentProject = this->projects.size()-1;
+    qDebug() << "==>[ProjetModel::closeProject] currentProject = " << this->currentProject <<endl;
 }
-int ProjectModel::addFile(ProjectItem * file,QString suffix){
+int ProjectModel::addFile(ProjectItem* file, QString suffix){
     if(this->currentProject == -1) return -1;
     TreeNode * node = rootItem->child(this->currentProject)->child(0);
     QModelIndex node_index = this->index(0,0,this->index(this->currentProject,0));
@@ -45,6 +47,7 @@ int ProjectModel::addFile(ProjectItem * file,QString suffix){
 //        node->removeChild(this->currentProject);
 //        this->endRemoveRows();
 //    }
+//    remove existing file which has the same suffix
     for(int i=0;i<node->childCount();i++)
     {
         TreeNode *child = node->child(i);
@@ -107,7 +110,7 @@ int ProjectModel::removeTool(ProjectItem * tool)
     return 0;
 }
 
-TreeNode *ProjectModel::getItem(const QModelIndex &index) const
+TreeNode* ProjectModel::getItem(const QModelIndex &index) const
 {
     if (index.isValid()) {
         TreeNode *item = static_cast<TreeNode*>(index.internalPointer());
@@ -119,6 +122,7 @@ TreeNode *ProjectModel::getItem(const QModelIndex &index) const
 QString ProjectModel::getSelectTreeNodeName(const QModelIndex &index) const
 {
     TreeNode * node = this->getItem(index);
+    qDebug() << "ProjectModal::getSelectTreeNodeName : " << node->data(0).toString() << endl;
     return node->data(0).toString();
 
 }
@@ -132,9 +136,10 @@ int ProjectModel::getSelectTreeNodeType(const QModelIndex &index) const
 
 QVariant ProjectModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
+    if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
+        qDebug() << "==>[ProjectModel::headerData]  " << rootItem->data(section) <<endl;
         return rootItem->data(section);
-
+    }
     return QVariant();
 }
 
@@ -156,12 +161,12 @@ QModelIndex ProjectModel::index(int row, int column, const QModelIndex &parent) 
     return QModelIndex();
 }
 
-QModelIndex ProjectModel::parent(const QModelIndex &index) const
+QModelIndex ProjectModel::parent(const QModelIndex &childIndex) const
 {
-    if (!index.isValid())
+    if (!childIndex.isValid())
         return QModelIndex();
 
-    TreeNode *childItem = static_cast<TreeNode*>(index.internalPointer());
+    TreeNode *childItem = static_cast<TreeNode*>(childIndex.internalPointer());
     TreeNode *parentItem = childItem->parent();
 
     if (parentItem == rootItem)
@@ -200,10 +205,7 @@ int ProjectModel::columnCount(const QModelIndex &parent) const
 
 QVariant ProjectModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid())
-        return QVariant();
-
-    if (role != Qt::DisplayRole)
+    if (!index.isValid() || role != Qt::DisplayRole)
         return QVariant();
 
     TreeNode *item = static_cast<TreeNode*>(index.internalPointer());

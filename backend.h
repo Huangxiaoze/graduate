@@ -11,17 +11,8 @@
 class BackEnd: public QObject
 {
     Q_OBJECT
-private:
-    QString excuteFile;
-    bool isBusy = false;
-    bool isBatch = false;
-    QString currentModel;
-    QString currentFormule;
-    QString currentParametersList;
-    QString out;
-    QProcess * cmd;    
-public:
 
+public:
     BackEnd(const QString excuteFileName);
     bool getIsBusy();
     QString getOutput();
@@ -42,6 +33,15 @@ private slots:
     void on_readerror();
     void on_finished(int exitCode, QProcess::ExitStatus exitStatus);
 
+private:
+    QString excuteFile;
+    bool isBusy = false;
+    bool isBatch = false;
+    QString currentModel;
+    QString currentFormule;
+    QString currentParametersList;
+    QString out;
+    QProcess * cmd;
 };
 
 #endif // BACKEND_H

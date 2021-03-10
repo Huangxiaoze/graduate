@@ -4,6 +4,11 @@
 
 UpdateNetworkThread::UpdateNetworkThread(QObject *parent) : QThread(parent)
 {
+    qDebug() << "===> UpdateNetworkThread create.....\n" << endl;
+}
+
+UpdateNetworkThread::~UpdateNetworkThread() {
+    qDebug() << "===> UpdateNetworkThread destroy...\n" << endl;
 }
 
 void UpdateNetworkThread::run()
@@ -47,9 +52,10 @@ int UpdateNetworkThread::parsingNetWork()
 
     while (!file.atEnd()) {
         QStringList line_list = parsingLine(file.readLine());
+        qDebug() << "==>[UpdateNetworkThread::parsingNetwork]line_list : " << line_list << endl;
         if(line_list.size() == 0) continue;
         if (line_list[0] == "#"){
-             NetworkLayerData * new_layer = new NetworkLayerData(line_list[5],line_list[4]);
+            NetworkLayerData * new_layer = new NetworkLayerData(line_list[5],line_list[4]);
             layers->append(new_layer);
             int length = line_list[3].toInt();
             if(line_list[4] == LAYER_TYPE_INPUT)

@@ -22,8 +22,10 @@ public:
     void showNetworkGraph();
 public slots:
     void removeSubTab(int index);
-    void on_addNetworkGraph(const QString name, const QString layertype, int layernum, int layerwhich);
+    void on_addNetworkGraph(const QString name, const QString layertype,
+                            int layernum, int layerwhich);
     void showlayer(int layer);
+    void on_show_network_file(QString filepath);
 
 signals:
     void updateNetworkNodeStatus(QJsonObject obj);
@@ -31,8 +33,8 @@ signals:
 private:
     Ui::ResultView *ui;
 
-    CompareRelation * resultGraph = nullptr;
-    NetworkGraph *networkGraph = nullptr;
+    CompareRelation * resultGraph = nullptr; // neuron graph
+    NetworkGraph *networkGraph = nullptr; // layer graph
     QString lastLayer;
 };
 

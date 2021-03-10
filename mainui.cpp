@@ -1,3 +1,4 @@
+#include <Python.h>
 #include "mainui.h"
 #include "ui_mainui.h"
 #include <QPushButton>
@@ -22,6 +23,9 @@ MainUI::MainUI(QWidget *parent) :
     QDir dir = QDir::tempPath();
     dir.cd("Qt");
     dir.cd("lib");
+
+    qDebug() << "tmp: " << dir.path();
+
     backend = new BackEnd(dir.absoluteFilePath("deepsymbol"));
 //    deepgbackend = new BackEnd("/home/deepui/deepg/code/build/deepg_constraints");
     deepgbackend = new BackEnd(DEEPG_BACKEND);
@@ -39,6 +43,9 @@ MainUI::MainUI(QWidget *parent) :
 
     planetbackend = new BackEnd(PLANET_BACKEND);
     connect(planetbackend,SIGNAL(sendOut(char *)),this,SLOT(on_readoutput(char *)));
+
+    maraboubackend = new BackEnd(MARABOU_BACKEND);
+    connect(maraboubackend, SIGNAL(sendOut(char *)), this, SLOT(on_readoutput(char *)));
 
    // backend = new BackEnd("/home/xuechao/xuechao/work/Lab/DeepAI/deepsymbol/deepsymbol");
     connect(backend, SIGNAL(sendOut(char * )), this,SLOT(on_readoutput(char *)) );
@@ -114,6 +121,11 @@ void MainUI::initUI()
     connect(this->settingView,SIGNAL(SIGNAL_run_with_augs(const QString,const QString,const QString,const double)),this,SLOT(verify_with_augs(const QString,const QString,const QString,const double)));
     connect(this->settingView,SIGNAL(SIGNAL_run_reluplex(int,bool,const QString)),this,SLOT(run_reluplex(int,bool,const QString)));
     connect(this->settingView,SIGNAL(SIGNAL_run_planet(const QString)),this,SLOT(run_planet(const QString)));
+    // huangxiaoze --- start
+    connect(this->settingView, SIGNAL(SIGNAL_importNetwork(QString)), this->resultView, SLOT(on_show_network_file(QString)));
+    connect(this->settingView, SIGNAL(SIGNAL_run_abstract(QJsonObject)), this, SLOT(on_run_abstract(QJsonObject)));
+
+    // huangxiaoze --- end
     //program out
     connect(this->settingView,SIGNAL(SIGNAL_programout(const QString)),this,SLOT(on_updateProgramOut(const QString)));
     //status bar out
@@ -121,6 +133,60 @@ void MainUI::initUI()
 
     statusBar()->addWidget(this->statusBarLabel,1);
 }
+
+// huangxiaoze -- start
+
+void MainUI::on_run_abstract(QJsonObject parameter) {
+    qDebug() << "MainUI::on_run_abstract" << endl;
+    QStringList keys = parameter.keys();
+    qDebug() << parameter << endl;
+
+    Py_Initialize();
+    PyRun_SimpleString("print('----MainUI Python start----')");
+    PyRun_SimpleString("import sys");
+    PyRun_SimpleString("sys.path.append('./')");
+    PyObject *core_nnet_read_nnet = PyImport_ImportModule("core.nnet.read_nnet");
+    PyObject *prodeep = PyImport_ImportModule("core.prodeep.prodeep");
+    if (prodeep == nullptr) {
+        qDebug() << "prodeep is null" << endl;
+        return;
+    } else {
+        qDebug() << "prodeep import success" << endl;
+    }
+    PyObject *abstract = PyObject_GetAttrString(prodeep, "abstract");
+    if (abstract == nullptr) {
+        qDebug() << "abstract is null" << endl;
+        return;
+    } else {
+        qDebug() << "get abstract success" << endl;
+    }
+    PyObject *arg = Py_BuildValue("(s, s, i, s)",
+                                    parameter["filepath"],
+                                    parameter["abstraction_type"],
+                                    parameter["abstraction_sequence"].toInt(),
+                                    parameter["property_id"]
+                                  );
+    if (arg == nullptr) {
+        qDebug() << "arg is null" << endl;
+        return;
+    }
+    PyObject *net = PyEval_CallObject(abstract, arg);
+
+    PyObject *pFunc2 = PyObject_GetAttrString(core_nnet_read_nnet, "get_network_in_json_str");
+    PyObject *pArg2 = Py_BuildValue("(O)", net);
+    PyObject *str = PyEval_CallObject(pFunc2, pArg2);
+    char *content = NULL;
+    PyArg_Parse(str,"s", &content);
+
+    QString value = content;
+
+    qDebug() << value << endl;
+
+    Py_Finalize();
+}
+
+// huangxiaoze -- end
+
 inline QString generateAbsoluteResultJsonFile(QString jsonFile)
 {
     QDir dir = QDir::tempPath();
@@ -129,17 +195,20 @@ inline QString generateAbsoluteResultJsonFile(QString jsonFile)
     return dir.absoluteFilePath(jsonFile);
 }
 void MainUI::Run(){
- if(!this->projectView->isValidProject()) return;
- QString projectParameters = this->projectView->getProjectParameters();
- QString othersParameters = " --robust "+this->settingView->getRobustnessType()+
-                            " --delta "+ QString::number(this->settingView->getDelta()) +
-                            " --dumpJSON "+generateAbsoluteResultJsonFile(JSON_RESULT_FILE);
+     if (!this->projectView->isValidProject()) {
+        qDebug() << "projectView is invalid...";
+        return;
+     }
+     QString projectParameters = this->projectView->getProjectParameters();
+     QString othersParameters = " --robust "+this->settingView->getRobustnessType()+
+                                " --delta "+ QString::number(this->settingView->getDelta()) +
+                                " --dumpJSON "+generateAbsoluteResultJsonFile(JSON_RESULT_FILE);
 
- backend->setCurrentParametersList(projectParameters+" "+othersParameters);
+     backend->setCurrentParametersList(projectParameters+" "+othersParameters);
 
 
- this->outView->clear(); 
- backend->run();
+     this->outView->clear();
+     backend->run();
 }
 
 void MainUI::verify_with_augs(const QString inputfilename,const QString network,const QString robustness,const double delta)
@@ -425,6 +494,17 @@ void MainUI::verify_with_input_deepgcfg(const QString inputfilename)
 
 
     backend->run(true);
+}
+
+void MainUI::keyPressEvent(QKeyEvent *event) {
+    switch (event->key()) {
+    case Qt::Key_Escape :
+        this->projectView->closeProject();
+        this->close();
+        break;
+    default:
+        break;
+    }
 }
 
 void MainUI::closeEvent(QCloseEvent *event)

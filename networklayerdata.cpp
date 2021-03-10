@@ -54,7 +54,7 @@ void NetworkLayerData::setData(int row, int column,const QString data)
     assert(this->rowHeadNames);
     assert(this->columnHeadNames);
     if(row >= this->rowHeadNames->size() || column > this->columnHeadNames->size()){
-        qDebug() << "Invalid setting data";
+        qDebug() << "NetworkLayerData::setData ==> invalid arguments" << endl;
         return;
     }
     assert(this->data->at(row));

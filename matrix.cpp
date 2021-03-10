@@ -4,7 +4,8 @@
 #include <QScrollBar>
 #include <QToolTip>
 
-Matrix::Matrix(const QString name, QStringList * rowHeadName,QStringList * columnHeadName, bool isSetDefaultHeadName,QWidget *parent) :
+Matrix::Matrix(const QString name, QStringList * rowHeadName,
+               QStringList * columnHeadName, bool isSetDefaultHeadName,QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Matrix)
 {
@@ -181,6 +182,7 @@ bool Matrix::eventFilter(QObject *obj, QEvent *event)
         }
     return QWidget::eventFilter(obj, event);
 }
+
 void Matrix::choseItem(QModelIndex index)
 {
     if(!index.isValid())
@@ -190,6 +192,7 @@ void Matrix::choseItem(QModelIndex index)
         return;
     QToolTip::showText(QCursor::pos(),text);
 }
+
 Matrix::~Matrix()
 {
     delete ui;

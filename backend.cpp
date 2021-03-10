@@ -3,6 +3,7 @@
 #include <QDebug>
 BackEnd::BackEnd(const QString excuteFileName)
 {
+    qDebug() << "BackEnd::BackEnd(const QString executeFileName) ==> " << excuteFileName << endl;
     this->excuteFile = excuteFileName;
     QFile file(this->excuteFile);
     cmd = new QProcess(this);
@@ -19,7 +20,7 @@ BackEnd::BackEnd(const QString excuteFileName)
     //cmd->start("bash");
     //#endif
 
-   // cmd->waitForStarted();
+    // cmd->waitForStarted();
 
 
 }
@@ -59,7 +60,7 @@ void BackEnd::setCurrentParametersList(const QString parametersList){
 void BackEnd::on_readoutput()
 {
    // QString result =QString(cmd->readAllStandardOutput().data());
-    if(!this->isBatch)emit sendOut(cmd->readAllStandardOutput().data());
+    if(!this->isBatch) emit sendOut(cmd->readAllStandardOutput().data());
     //out.append(cmd->readAllStandardOutput().data());
     //qDebug() << result;
     //this->isBusy = false;
@@ -90,7 +91,7 @@ int BackEnd::run(bool is_batch,const QString workingdir){
     //cmd->write((command).toLocal8Bit() + '\n');        
 //    cmd->start("conda activate");
 //    cmd->waitForStarted();
-    if(!workingdir.isEmpty())cmd->setWorkingDirectory(workingdir);
+    if(!workingdir.isEmpty()) cmd->setWorkingDirectory(workingdir);
     cmd->start(command);
     //cmd->execute(command);
     this->isBusy = false;

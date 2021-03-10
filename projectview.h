@@ -50,8 +50,6 @@ private slots:
     void on_importNetwork();
     void on_importInput();
 
-
-
 private:
     Ui::ProjectView *ui;
     ProjectModel * projectModel;

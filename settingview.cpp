@@ -69,6 +69,23 @@ void SettingView::initReluplexCfgView_S_L_Connection()
     connect(this->reluplexconfig,SIGNAL(SIGNAL_run_reluplex(int,bool,const QString)),this,SLOT(run_reluplex(int,bool,const QString)));
 }
 
+// huangxiaoze---start
+void SettingView::initMarabouView_S_L_Connection() {
+    qDebug() << "SettingView::initMarabouView_S_L_Connection" << endl;
+    connect(this->marabou, SIGNAL(SIGNAL_import_network(QString)), this, SLOT(on_importNetwork(QString)));
+    connect(this->marabou, SIGNAL(SIGNAL_run_abstract(QJsonObject)), this, SLOT(on_run_abstract(QJsonObject)));
+}
+
+void SettingView::on_importNetwork(QString file) {
+    qDebug() << "SettingView::on_importNetwork " << file << endl;
+    emit SIGNAL_importNetwork(file);
+}
+
+void SettingView::on_run_abstract(QJsonObject parameter) {
+    emit SIGNAL_run_abstract(parameter);
+}
+// huangxiaoze---end
+
 void SettingView::addTool(QString tool,Project * project)
 {
     if(tool == TOOL_BASIC)
@@ -112,10 +129,21 @@ void SettingView::addTool(QString tool,Project * project)
             int index=this->ui->setting->addTab(this->reluplexconfig,tool);
             this->ui->setting->tabBar()->tabButton(index,QTabBar::RightSide)->hide();
         }
+    } else if (tool == TOOL_MARABOU) {
+        if (this->marabou) {
+            int index = this->ui->setting->addTab(this->marabou, tool);
+            this->ui->setting->tabBar()->tabButton(index,QTabBar::RightSide)->hide();
+        } else {
+            this->marabou = new Marabou(project);
+            this->initMarabouView_S_L_Connection();
+            int index = this->ui->setting->addTab(this->marabou, tool);
+            this->ui->setting->tabBar()->tabButton(index,QTabBar::RightSide)->hide();
+        }
     }
 }
  void SettingView::on_updateNetworkNodeStatus(QJsonObject obj)
  {
+//     qDebug() << "QJsonObject: " << obj;
      if(!this->network->isLoaded()) return;
      this->network->clearCount();
      this->network->clearBoundOfNode();
@@ -233,6 +261,7 @@ void SettingView::on_removeTool(QString tool)
 
 void SettingView::openProject(Project * p)
 {
+    qDebug() << "SettingView::openProject" << endl;
     if(p == nullptr)
     {
         qDebug() <<"setting view receive a invalid project";

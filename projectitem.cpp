@@ -1,11 +1,12 @@
 #include "projectitem.h"
-
+#include <QDebug>
 ProjectItem::ProjectItem()
 {
 
 }
 ProjectItem::ProjectItem(QList<QVariant> column)
 {
+    qDebug() << "ProjectItem::ProjectItem ==> arg column = " << column << endl;
     this->column->append(column);
 }
 QVariant ProjectItem::get(int column) const

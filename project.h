@@ -21,7 +21,8 @@
 #define TOOL_DIFFAI "DiffAI"
 #define TOOL_RELUPLEX "Reluplex"
 #define TOOL_PLANET "PLANET"
-#define TOOLS {TOOL_BASIC,TOOL_GEOMETRY,TOOL_RELUPLEX}
+#define TOOL_MARABOU "Marabou"
+#define TOOLS {TOOL_BASIC,TOOL_GEOMETRY,TOOL_RELUPLEX, TOOL_MARABOU}
 //#define TOOLS {TOOL_DEEPSYMBOL,TOOL_DIFFAI,TOOL_DEEPG}
 
 
@@ -84,6 +85,8 @@ public:
 
     void save();
     void open(QString projectFile,QStringList tools);
+
+    // get path or name indicated by column
     QVariant get(int column) const;
     int count() const;
 

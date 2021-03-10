@@ -79,7 +79,7 @@ void GraphWidget::addNode(QString name, int NodeType)
     Node * item = new Node(name,this,NodeType);
 
     this->scene()->addItem(item);
-    if(NodeType!=NODE_TYPE_LAYER)this->shuffle();
+    if(NodeType!=NODE_TYPE_LAYER)this->shuffle(); // current shuffle() do nothing
     if(NodeType==NODE_TYPE_LAYER)
     {
         item->setPos(this->nodesMap.size()*70,0);

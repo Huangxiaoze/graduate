@@ -1,0 +1,21 @@
+--------------------------------------------------------------------------------parameters:--------------------------------------------------------------------------------
+net_number: 1_2
+property_id: adversarial_0
+mechanism: marabou_with_ar
+abstraction_type: complete
+refinement_type: cegar
+abstraction_sequence: 100
+refinement_sequence: 50
+results_directory: /home/xiaoze/Desktop/artifact/CEGAR_NN/experiments/dev_exp_results_archive
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++results:++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+net_name: ACASXU_run2a_1_2_batch_2000.nnet
+property_id: adversarial_0
+abstraction_time: 5.8106067180633545
+query_result: SAT
+num_of_refine_steps: 0
+total_ar_query_time: 5.843928575515747
+ar_times: [0.027266263961791992]
+ar_sizes: [74]
+refine_sequence_times: []
+last_net_data: {"layer_sizes": {"0": 5, "1": 50, "2": 4, "3": 4, "4": 4, "5": 4, "6": 2, "7": 1}, "num_nodes": 74, "num_layers": 8, "num_hidden_layers": 6}
+last_query_time: 0.029331207275390625

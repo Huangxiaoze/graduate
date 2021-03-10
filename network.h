@@ -16,7 +16,9 @@ class Network : public QWidget
 public:
     explicit Network(QWidget *parent = nullptr);
     ~Network();
-    int addLayer(QString name, QString type, int flag=15, QStringList * inputName = nullptr, QStringList * outputName = nullptr);
+    int addLayer(QString name, QString type,
+                 int flag=15, QStringList * inputName = nullptr,
+                 QStringList * outputName = nullptr);
 
 
 

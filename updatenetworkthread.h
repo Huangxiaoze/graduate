@@ -11,6 +11,7 @@ class UpdateNetworkThread :public  QThread
     Q_OBJECT
 public:
     explicit UpdateNetworkThread(QObject *parent = nullptr);
+    ~UpdateNetworkThread();
     void setParameters(QString filePath,QString fileName,bool isFirstLoad=true);
     void run_without_thread();
     QList<NetworkLayerData *> * getLayers();

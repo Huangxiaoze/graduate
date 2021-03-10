@@ -9,7 +9,9 @@
 #include "loadingwidget.h"
 #include "deepgcfg.h"
 #include "reluplexcfg.h"
+#include "marabou.h"
 
+#include <QJsonObject>
 
 namespace Ui {
 class SettingView;
@@ -42,6 +44,10 @@ public slots:
     void on_networkFileChangedTextOnly(QString path,QString filename);
     void on_inputFileChanged(QString path,QString fileName);//TODO
     void on_importNetwork();
+    // huangxiaoze---start
+    void on_importNetwork(QString);
+    void on_run_abstract(QJsonObject);
+    // huangxiaoze---end
     void on_importInput();
     void on_Run_DeepG(const QString binpath,const QString configdir);
     void on_Run_ERAN(const QString network,const QString dataset,const QString configdir,int paramnum,int inputnum);
@@ -59,28 +65,18 @@ public slots:
     void on_addNetworkGraph(const QString name, const QString layertype, int layernum, int layerwhich);
     void showlayer(int layer);
 
-private:
-    Ui::SettingView *ui;
-
-     Network * network = new Network();
-    ConfigurationView * cfg = nullptr;    
-    DeepGcfg *deepgcfg = nullptr;
-    reluplexcfg *reluplexconfig = nullptr;
-    UpdateNetworkThread * updateThread = new UpdateNetworkThread();
-    LoadingWidget * loadWiget;
-    void initConfigurationView_S_L_Connection();
-    void initDeepGCfgView_S_L_Connection();
-    void initReluplexCfgView_S_L_Connection();
-    void addTool(QString tool,Project *p);
-    void removeTool(QString tool);    
 
 signals:
+    // huangxiaoze --- start
+    void SIGNAL_run_abstract(QJsonObject);
+    // huangxiaoze --- end
     void SIGNAL_run();
     void SIGNAL_run_with_augs(const QString inputfilename,const QString network,const QString robustness,const double delta);
     void SIGNAL_init_Batch();
     void SIGNAL_over_Batch();
     void SIGNAL_showstatus(const QString msg);
     void SIGNAL_importNetwork();
+    void SIGNAL_importNetwork(QString);
     void SIGNAL_importInput();
     void SIGNAL_programout(const QString out);
     void SIGNAL_run_with_input(const QString inputfilename);
@@ -93,6 +89,23 @@ signals:
     void SIGNAL_run_reluplex(int timeout,bool withDeepsymbol,const QString parameters);
     void SIGNAL_run_planet(const QString args);
 
+private:
+    void initConfigurationView_S_L_Connection();
+    void initDeepGCfgView_S_L_Connection();
+    void initReluplexCfgView_S_L_Connection();
+    void initMarabouView_S_L_Connection();
+    void addTool(QString tool,Project *p);
+    void removeTool(QString tool);
+
+    Ui::SettingView *ui;
+
+    Network * network = new Network();
+    ConfigurationView * cfg = nullptr;
+    DeepGcfg *deepgcfg = nullptr;
+    reluplexcfg *reluplexconfig = nullptr;
+    Marabou *marabou = nullptr;
+    UpdateNetworkThread * updateThread = new UpdateNetworkThread();
+    LoadingWidget * loadWiget;
 
 };
 

@@ -9,12 +9,12 @@
 Edge::Edge(Node *sourceNode, Node *destNode, int edgetype)
     : arrowSize(10)
 {
-    setAcceptedMouseButtons(0);
+    setAcceptedMouseButtons(nullptr);
     //setZValue(-10);
     source = sourceNode;
     dest = destNode;    
     this->edgetype=edgetype;
-    source->resetGroundTruth();
+    source->resetGroundTruth(); // isGroundTruth default value is true, source neuron is not the last neuron
     source->addEdge(this);
     dest->addEdge(this);
     adjust();
@@ -43,8 +43,8 @@ void Edge::adjust()
     qreal length = line.length();
 
     prepareGeometryChange();
-    sourcePoint=line.p1();
-    destPoint=line.p2();
+    sourcePoint = line.p1();
+    destPoint = line.p2();
     if(edgetype==EDGE_TYPE_NEURON)
     {
         if (length > qreal(20.)) {

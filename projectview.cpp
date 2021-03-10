@@ -50,7 +50,7 @@ void ProjectView::addNetwork()
         if(!file.endsWith(suffix)){
             QFileInfo info(file);
             emit SIGNAL_networkChangedTextOnly(info.absolutePath(),info.fileName());
-            //QMessageBox::warning(this, "Worning", "Invalid File!\n Please open file with suffix"+suffix);
+            QMessageBox::warning(this, "Warning", "Invalid File!\n Please open file with suffix "+suffix);
             return;
         }
 
@@ -59,7 +59,7 @@ void ProjectView::addNetwork()
         if(info.absolutePath().compare(this->project->getPath()) != 0){
             QDir dir(this->project->getPath());
             QString destFile = dir.absoluteFilePath(info.fileName());
-            qDebug() << info.absoluteFilePath() << destFile;
+            qDebug() << "==>ProjectView::addNetwork: " << info.absoluteFilePath() << destFile;
             QFileInfo destInfo(destFile);
             if(destInfo.exists())
                 QFile::remove(destFile);
@@ -67,8 +67,9 @@ void ProjectView::addNetwork()
 
             this->project->setNetworkFileName(destInfo.fileName());
             return;
+        } else {
+            this->project->setNetworkFileName(info.fileName());
         }
-        this->project->setNetworkFileName(info.fileName());
     }
    // this->project->setNetworkFileName(fileName);
 }
@@ -99,10 +100,9 @@ void ProjectView::addInput()
             this->project->setInputFileName(destInfo.fileName());
             return;
 
+        } else {
+            this->project->setInputFileName(info.fileName());
         }
-
-        this->project->setInputFileName(info.fileName());
-
     }
    // this->project->setInputFileName(fileName);
 }
@@ -120,7 +120,6 @@ void ProjectView::addTool()
         //this->addTool(tool,QString::number(index));
         //this->settingView->addTool(tool);
     }
-
 }
 void ProjectView::removeTool()
 {
@@ -202,6 +201,7 @@ bool ProjectView::isValidProject()
 
 void ProjectView::treeViewDoubleClick(const QModelIndex & index)
 {
+    qDebug() << "ProjectView::treeViewDoubleClick " << endl;
     //curtextEdit->setText(dirModel->filePath(index));
     //loadFile(dirModel->filePath(index));
     int type = this->projectModel->getSelectTreeNodeType(index);
@@ -214,7 +214,6 @@ void ProjectView::treeViewDoubleClick(const QModelIndex & index)
 
 int ProjectView::openProject()
 {
-    if(this->isLoadProject)this->closeProject();
     QFileDialog dialog(this);
     //dialog.setAcceptMode(QFileDialog::AcceptOpen);
     //dialog.setViewMode(QFileDialog::List);
@@ -229,8 +228,9 @@ int ProjectView::openProject()
     QStringList nameFilters;
     nameFilters << "Project Files(*.pro)";
     dialog.setNameFilters(nameFilters);
-    if (dialog.exec() != QDialog::Accepted)
+    if (dialog.exec() != QDialog::Accepted) {
         return -1;
+    }
     while(this->isLoadProject){
         this->closeProject();
     }
@@ -243,7 +243,7 @@ int ProjectView::openProject()
 
     this->isLoadProject = true;
     QStringList CandidateTools(TOOLS);
-    this->project->open(file,CandidateTools);
+    this->project->open(file, CandidateTools);
 //    if(this->project->isValidNetworkFile()){
 //        projectModel->addFile(new ProjectItem({this->project->getNetworkFileName(),this->project->getPath()}));
 //    }
@@ -265,7 +265,7 @@ int ProjectView::newProject(){
     QLineEdit::EchoMode echoMode=QLineEdit::Normal;
     bool ok;
     QString projectName = QInputDialog::getText(this, dlgTitle,txtLabel, echoMode,defaultInput, &ok);
-    if(! ok) return CREATE_FILE_FAILED;
+    if(!ok) return CREATE_FILE_FAILED;
     Choose * path = new Choose("Choose Project Path",false);
     if(path->exec() ==  QDialog::Accepted){
         while(this->isLoadProject){
@@ -276,7 +276,6 @@ int ProjectView::newProject(){
         QDir dir(projectPath);
         int result = Util::createFile(dir.absolutePath(),projectName+".pro");
         if(result == CREATE_FILE_FAILED){
-            qDebug()<<"exist ";
             return CREATE_FILE_FAILED;
         }
         this->project = new Project(projectPath,projectName);
@@ -291,12 +290,10 @@ int ProjectView::newProject(){
         return CREATE_FILE_SUCCESS;
     }
     return CREATE_FILE_FAILED;
-
-
-
 }
+
 void ProjectView::closeProject(){
-    if(! this->isLoadProject) return;
+    if(!this->isLoadProject) return;
     this->project->save();
     projectModel->closeProject(0);
 

@@ -15,6 +15,7 @@ public:
     Util();
     static int createFile(const QString filePath, const QString fileName);
     static QJsonObject * parseJsonFile(const QString fileName);
+    static QJsonObject * parseJsonFile_python(const QString fileName);
 
 };
 

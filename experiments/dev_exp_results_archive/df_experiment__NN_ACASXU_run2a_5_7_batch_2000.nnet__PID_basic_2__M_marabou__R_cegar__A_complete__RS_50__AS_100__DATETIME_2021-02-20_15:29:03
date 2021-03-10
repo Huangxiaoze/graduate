@@ -1,0 +1,1 @@
+{"net_name":{"0":"ACASXU_run2a_5_7_batch_2000.nnet"},"property_id":{"0":"basic_2"},"query_result":{"0":"UNSAT"},"orig_query_time":{"0":489.9415142536},"net_data":{"0":"{\"layer_sizes\": {\"0\": 5, \"1\": 50, \"2\": 50, \"3\": 50, \"4\": 50, \"5\": 50, \"6\": 50, \"7\": 5}, \"num_nodes\": 310, \"num_layers\": 8, \"num_hidden_layers\": 6}"}}

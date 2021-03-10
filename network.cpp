@@ -21,7 +21,10 @@ Network::Network(QWidget *parent) :
 
 void Network::saveNetwork()
 {
-    if(!this->isValueChanged) return;
+    if (!this->isValueChanged) {
+        qDebug() << "Network::saveNetwork ==> network not changed" << endl;
+        return;
+    }
     if(this->filePath == "" || this->fileName == "") return;
     QDir dir(this->filePath);
     QFile file(dir.absoluteFilePath(this->fileName));

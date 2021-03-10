@@ -58,28 +58,6 @@ int Project::count() const
     return ELEMENT_NUMBER;
 }
 
-void Project::save()
-{
-    QString project = this->serilize();
-    qDebug() << project;
-    QDir dir(this->path);
-    QFile file(dir.absoluteFilePath(this->name+".pro"));
-    file.open(QIODevice::WriteOnly | QIODevice::Text);
-    file.write(project.toUtf8());
-    file.close();
-    emit saveProject();
-}
-
-void Project::open(QString projectFile,QStringList tools)
-{
-
-    QFile file(projectFile);
-    file.open(QIODevice::ReadOnly | QIODevice::Text);
-    QByteArray t = file.readAll();
-    this->unserilize(QString(t),tools);
-    file.close();
-}
-
 QString Project::serilize()
 {
     QString result = this->networkFileName+";"+this->inputFileName+";";
@@ -93,16 +71,20 @@ QString Project::serilize()
 
 }
 
-QString Project::getNetworkFileName()
+void Project::save()
 {
-    return this->networkFileName;
+    QString project = this->serilize();
+    qDebug() << project;
+    QDir dir(this->path);
+    QFile file(dir.absoluteFilePath(this->name+".pro"));
+    file.open(QIODevice::WriteOnly | QIODevice::Text);
+    file.write(project.toUtf8());
+    file.close();
+    emit saveProject();
 }
-QString Project::getInputFileName(){
-    return this->inputFileName;
-}
-
-
-
+/*
+ * @tools: 项目中支持的所有工具
+ */
 int Project::unserilize(const QString & project,QStringList tools)
 {
     QStringList list = project.split(";");
@@ -129,6 +111,28 @@ int Project::unserilize(const QString & project,QStringList tools)
     return UNSERILIZE_SUCCESS;
 }
 
+void Project::open(QString projectFile,QStringList tools)
+{
+
+    QFile file(projectFile);
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QByteArray t = file.readAll();
+    this->unserilize(QString(t),tools);
+    file.close();
+}
+
+
+QString Project::getNetworkFileName()
+{
+    return this->networkFileName;
+}
+QString Project::getInputFileName(){
+    return this->inputFileName;
+}
+
+
+
+
 void Project::setNetworkFileName(const QString & networkFileName)
 {
     this->networkFileName = networkFileName;
@@ -143,6 +147,7 @@ void Project::setInputFileName(const QString & inputFileName)
 }
 QString Project::getNetworkFileSuffix()
 {
+    qDebug() << "==>Project::getNetworkFileSuffix(): return \".rlv\"" << endl;
     /*(if(this->robustnessType == PRISM_FILE){
         return ".prism";
     }
@@ -156,6 +161,7 @@ QString Project::getNetworkFileSuffix()
 }
 QString Project::getInputFileSuffix()
 {
+    qDebug() << "==>Project::getInputFileSuffix(): return \".in\"" << endl;
     return ".in";
 }
 
@@ -164,6 +170,7 @@ QString Project::getAbsoluteNetworkFile()
     QDir dir(this->path);
     return dir.absoluteFilePath(this->networkFileName);
 }
+
 QString Project::getAbsoluteInputFile()
 {
     QDir dir(this->path);
