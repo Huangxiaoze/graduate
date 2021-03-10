@@ -1,6 +1,5 @@
-print("Hello")
 import sys
-sys.path.append("/CEGAR_NN")
+sys.path.append("/PRODeep")
 import os
 import json
 import copy
@@ -17,10 +16,9 @@ from core.utils.verification_properties_utils import (
     get_test_property_acas, is_satisfying_assignment, TEST_PROPERTY_ACAS
 )
 
-#print("Word")
-
 def abstract(nnet_filename, abstraction_type, abstraction_sequence, property_id=consts.PROPERTY_ID, verbose=consts.VERBOSE
 ):
+    print(nnet_filename, abstraction_type, abstraction_sequence, property_id)
     test_property = get_test_property_acas(property_id)
     dynamically_import_marabou(query_type=test_property["type"])
     from core.nnet.read_nnet import network_from_nnet_file
@@ -34,7 +32,7 @@ def abstract(nnet_filename, abstraction_type, abstraction_sequence, property_id=
 
     # for i in range(len(test_property["output"])):
     #     test_property["output"][i][1]["Lower"] = lower_bound
-    net = network_from_nnet_file(fullname)
+    net = network_from_nnet_file(nnet_filename)
     print(f"size={len(net.layers)}")
 
     net, test_property = reduce_property_to_basic_form(network=net, test_property=test_property)
@@ -62,6 +60,7 @@ def abstract(nnet_filename, abstraction_type, abstraction_sequence, property_id=
     #         sequence_length=abstraction_sequence
     #     )
     else:
+        print("unknown abstraction")
         raise NotImplementedError("unknown abstraction")
     print("ABSTRACT END.......................................")
     return net

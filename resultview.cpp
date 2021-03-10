@@ -182,15 +182,20 @@ void ResultView::parsingJsonFile(QString jsonFile)
 // huangxiaoze--start
 void ResultView::on_show_network_file(QString jsonFile)
 {
-    return;
-//    Util::parseJsonFile_python(jsonFile);
+//    return;
     jsonFile = "/home/xiaoze/Desktop/artifact/CEGAR_NN/network.before.json";
     qDebug() << "ResultView::on_show_network: jsonFile = " << jsonFile << endl;
+    QJsonObject * jsonObj = Util::parseJsonFile_python(jsonFile);//Util::parseJsonFile(jsonFile);
+    this->showNetwork(jsonObj);
+}
+
+void ResultView::showNetwork(QJsonObject *jsonObj) {
+//    return;
+//    Util::parseJsonFile_python(jsonFile);
     this->resultGraph->clear();
     this->showCompareRelation();
     this->ui->result->setCurrentWidget(this->resultGraph);
 
-    QJsonObject * jsonObj = Util::parseJsonFile_python(jsonFile);//Util::parseJsonFile(jsonFile);
     if(jsonObj==nullptr) {
         qDebug() << "jsonObj is unvalid";
         return ;
@@ -243,12 +248,6 @@ void ResultView::on_show_network_file(QString jsonFile)
                 }
             }
         }
-//        for(int i=0;i<nodes;i++)
-//            for(int j=0;j<nodes;j++)
-//                if(G[i][j]!=0)qDebug()<<i<<" "<<j<<" "<<G[i][j];
-        //Caution:May cause some dead loop
-        //qDebug()<<du[0]<<du[1]<<du[2]<<du[3];
-        int posy=0;
         int max_layer_size = INT_MIN;
         std::map<int, int> layer2size;
         if (jsonObj->contains("layer_sizes")) {
@@ -266,41 +265,27 @@ void ResultView::on_show_network_file(QString jsonFile)
         qDebug() << "max_layer_size" << max_layer_size << endl;
         if(graph.contains(("names")))
         {
-            QJsonValue value = graph.value("names");
-            if(value.isArray())
-            {
-                QJsonArray array = value.toArray();
-                int size =array.size();
-                for(int i=0;i<size;i++){
-                    auto name = array.at(i).toString();
-                    auto pos = name.split("_");
-                    int x = pos[1].toInt();
-                    int y = pos[2].toInt();
-//                    qDebug() << "x=" << x << ", " << "y=" << y << endl;
-                    this->resultGraph->setpos(name, x * 3000, max_layer_size * (y + 1) / (layer2size[x] + 1) * 500);
-                }
+            if (graph.contains(("name2pos"))) {
+                QJsonValue name_value = graph.value("names");
+                QJsonValue pos_value = graph.value("name2pos");
+                if(name_value.isArray())
+                {
+                    QJsonArray array = name_value.toArray();
+                    if (pos_value.isObject()) {
+                        QJsonObject pos_obj = pos_value.toObject();
+                        int size =array.size();
+                        for(int i=0;i<size;i++){
+                            auto name = array.at(i).toString();
+                            auto pos = pos_obj.value(name).toObject();
+                            int x = pos.value("x").toInt();
+                            int y = pos.value("y").toInt();
+//                            qDebug() << "x=" << x << ", " << "y=" << y << endl;
+                            this->resultGraph->setpos(name, x * 3000, max_layer_size * (y + 1) / (layer2size[x] + 1) * 500);
+                        }
+                    }
+            }
             }
         }
-//        while(true)
-//        {
-//            int posx=0;
-//            for(int i=0;i<nodes;i++)
-//                if(du[i]==0)
-//                {
-//                    this->resultGraph->setpos(names.at(i),posx*40+posy*5,posy*40);
-//                    //qDebug()<<i<<" "<<posx<<" "<<posy;
-//                    du[i]=-posy-1;
-//                    posx++;
-//                }
-//            if(posx==0)break;
-//            for(int i=0;i<nodes;i++)
-//                if(du[i]==-posy-1)
-//                {
-//                    for(int j=0;j<nodes;j++)
-//                        if(G[i][j]==1)du[j]--;
-//                }
-//            posy++;
-//        }
     }
 
 }

@@ -60,7 +60,7 @@ QJsonObject * Util::parseJsonFile(const QString fileName)
 
 QJsonObject* Util::parseJsonFile_python(const QString fileName) {
     //初始化python
-    Py_Initialize();
+//    Py_Initialize();
 
     //直接运行python代码
     PyRun_SimpleString("print('----------Python Start')");
@@ -87,7 +87,7 @@ QJsonObject* Util::parseJsonFile_python(const QString fileName) {
     QString value = content;
 
     //释放python
-    Py_Finalize();
+//    Py_Finalize();
     QJsonParseError parseJsonErr;
     QJsonDocument document = QJsonDocument::fromJson(value.toUtf8(),&parseJsonErr);
     if(!(parseJsonErr.error == QJsonParseError::NoError))

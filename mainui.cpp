@@ -141,7 +141,7 @@ void MainUI::on_run_abstract(QJsonObject parameter) {
     QStringList keys = parameter.keys();
     qDebug() << parameter << endl;
 
-    Py_Initialize();
+//    Py_Initialize();
     PyRun_SimpleString("print('----MainUI Python start----')");
     PyRun_SimpleString("import sys");
     PyRun_SimpleString("sys.path.append('./')");
@@ -160,15 +160,18 @@ void MainUI::on_run_abstract(QJsonObject parameter) {
     } else {
         qDebug() << "get abstract success" << endl;
     }
+
     PyObject *arg = Py_BuildValue("(s, s, i, s)",
-                                    parameter["filepath"],
-                                    parameter["abstraction_type"],
-                                    parameter["abstraction_sequence"].toInt(),
-                                    parameter["property_id"]
+                                    parameter.value("filepath").toString().toStdString().c_str(),
+                                    parameter.value("abstract_type").toString().toStdString().c_str(),
+                                    parameter.value("abstraction_sequence").toString().toInt(),
+                                    parameter.value("property_id").toString().toStdString().c_str()
                                   );
     if (arg == nullptr) {
         qDebug() << "arg is null" << endl;
         return;
+    } else {
+        qDebug() << "arg is ok" << endl;
     }
     PyObject *net = PyEval_CallObject(abstract, arg);
 
@@ -180,9 +183,20 @@ void MainUI::on_run_abstract(QJsonObject parameter) {
 
     QString value = content;
 
-    qDebug() << value << endl;
+    qDebug() << "value is : " << value << endl;
 
-    Py_Finalize();
+//    Py_Finalize();
+
+    QJsonParseError parseJsonErr;
+    QJsonDocument document = QJsonDocument::fromJson(value.toUtf8(),&parseJsonErr);
+    if(!(parseJsonErr.error == QJsonParseError::NoError))
+    {
+        qDebug()<<"解析json文件错误！";
+        return;
+    }
+    QJsonObject *  result = new QJsonObject();
+    *result = document.object();
+    this->resultView->showNetwork(result);
 }
 
 // huangxiaoze -- end

@@ -1,3 +1,4 @@
+#include <Python.h>
 #include "mainui.h"
 
 #include <QApplication>
@@ -8,6 +9,7 @@
 
 int main(int argc, char *argv[])
 {
+    Py_Initialize();
     QApplication a(argc, argv);
 
     QDir tmpPath = QDir::tempPath();
@@ -56,5 +58,7 @@ int main(int argc, char *argv[])
 
     MainUI w;
     w.showMaximized();
-    return a.exec();
+    int ret = a.exec();
+    Py_Finalize();
+    return ret;
 }

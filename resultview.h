@@ -20,12 +20,17 @@ public:
     void parsingJsonFile(QString jsonFile);
     void showCompareRelation();
     void showNetworkGraph();
+    // huangxiaoze --- start
+    void showNetwork(QJsonObject *jsonObj);
+    // huangxiaoze --- end
 public slots:
     void removeSubTab(int index);
     void on_addNetworkGraph(const QString name, const QString layertype,
                             int layernum, int layerwhich);
     void showlayer(int layer);
+    // huangxiaoze --- start
     void on_show_network_file(QString filepath);
+    // huangxiaoze --- end
 
 signals:
     void updateNetworkNodeStatus(QJsonObject obj);

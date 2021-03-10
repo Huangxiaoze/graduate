@@ -150,9 +150,11 @@ def get_network_in_json_str(net):
     network_json['graph']['number_of_nodes'] = net.get_general_net_data()["num_nodes"]
     network_json['graph']['names'] = []
     network_json['graph']['edges'] = []
-    for layer in net.layers:
-        for node in layer.nodes:
+    network_json['graph']['name2pos'] = {}
+    for i, layer in enumerate(net.layers):
+        for j, node in enumerate(layer.nodes):
             network_json['graph']['names'].append(node.name)
+            network_json['graph']['name2pos'][node.name] = {"x": i, "y": j}
     for layer in net.layers:
         for node in layer.nodes:
             for edge in node.out_edges:
