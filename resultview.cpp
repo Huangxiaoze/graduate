@@ -54,12 +54,9 @@ void ResultView::on_addNetworkGraph(const QString name, const QString layertype,
     this->lastLayer=layerinfo;
 }
 
-//the network verify result is saving in a json file when the verify program finished.
 void ResultView::parsingJsonFile(QString jsonFile)
 {
-    jsonFile = "/home/xiaoze/Desktop/artifact/CEGAR_NN/network.before.json";
-    qDebug() << "ResultView::parsingJsonFile: jsonFile = " << jsonFile << endl;
-    this->resultGraph->clear();    
+    this->resultGraph->clear();
     this->showCompareRelation();
     this->ui->result->setCurrentWidget(this->resultGraph);
 
@@ -70,7 +67,7 @@ void ResultView::parsingJsonFile(QString jsonFile)
     }
     emit this->updateNetworkNodeStatus(*jsonObj);
     if(jsonObj->contains("graph"))
-    {        
+    {
         QJsonObject graph = jsonObj->value("graph").toObject();
         int nodes = 0;
         if(graph.contains("number_of_nodes")){
@@ -81,14 +78,15 @@ void ResultView::parsingJsonFile(QString jsonFile)
             }
         }
         QStringList names;
-        std::vector<int> du(nodes + 2, 0);
-        std::vector< std::vector<int> > G(nodes + 2, std::vector<int>(nodes + 2, 0));
-
+        int du[nodes+2];
+        memset(du,0,sizeof(du));
+        int G[nodes+2][nodes+2];
+        memset(G,0,sizeof(G));
         if(graph.contains(("names")))
-        {            
+        {
             QJsonValue value = graph.value("names");
             if(value.isArray())
-            {                
+            {
                 QJsonArray array = value.toArray();
                 int size =array.size();
                 for(int i=0;i<size;i++){
@@ -106,13 +104,12 @@ void ResultView::parsingJsonFile(QString jsonFile)
                 QJsonArray array = value.toArray();
                 int size =array.size();
                 for(int i=0;i<size;i++){
-                    int indexFrom = array.at(i).toObject().value("from").toInt();
-                    int indexTo = array.at(i).toObject().value("to").toInt();
-//                    qDebug() << "indexFrom=" << indexFrom <<" " << "indexTo=" << indexTo << endl;
+                    int indexFrom = array.at(i).toObject().value("from").toString().toInt();
+                    int indexTo = array.at(i).toObject().value("to").toString().toInt();
                     this->resultGraph->addEdge(names.at(indexFrom),names.at(indexTo));
                     //qDebug()<<indexFrom<<indexTo;
-//                    du[indexTo]++;
-//                    G[indexFrom][indexTo]=1;
+                    du[indexTo]++;
+                    G[indexFrom][indexTo]=1;
                 }
             }
         }
@@ -122,61 +119,30 @@ void ResultView::parsingJsonFile(QString jsonFile)
         //Caution:May cause some dead loop
         //qDebug()<<du[0]<<du[1]<<du[2]<<du[3];
         int posy=0;
-        int max_layer_size = INT_MIN;
-        std::map<int, int> layer2size;
-        if (jsonObj->contains("layer_sizes")) {
-            QJsonValue value = jsonObj->value("layer_sizes");
-            if (value.isObject()) {
-                QJsonObject layer_sizes = value.toObject();
-                qDebug() << layer_sizes << endl;
-                for (int i = 0; i < layer_sizes.size(); i++) {
-                    auto s = layer_sizes.value(std::to_string(i).c_str());
-                    layer2size[i] = s.toInt();
-                    max_layer_size = std::max(max_layer_size, s.toInt());
-                }
-            }
-        }
-        qDebug() << "max_layer_size" << max_layer_size << endl;
-        if(graph.contains(("names")))
+        while(true)
         {
-            QJsonValue value = graph.value("names");
-            if(value.isArray())
-            {
-                QJsonArray array = value.toArray();
-                int size =array.size();
-                for(int i=0;i<size;i++){
-                    auto name = array.at(i).toString();
-                    auto pos = name.split("_");
-                    int x = pos[1].toInt();
-                    int y = pos[2].toInt();
-                    qDebug() << "x=" << x << ", " << "y=" << y << endl;
-                    this->resultGraph->setpos(name, x * 3000, max_layer_size * (y + 1) / (layer2size[x] + 1) * 500);
+            int posx=0;
+            for(int i=0;i<nodes;i++)
+                if(du[i]==0)
+                {
+                    this->resultGraph->setpos(names.at(i),posx*40+posy*5,posy*40);
+                    //qDebug()<<i<<" "<<posx<<" "<<posy;
+                    du[i]=-posy-1;
+                    posx++;
                 }
-            }
+            if(posx==0)break;
+            for(int i=0;i<nodes;i++)
+                if(du[i]==-posy-1)
+                {
+                    for(int j=0;j<nodes;j++)
+                        if(G[i][j]==1)du[j]--;
+                }
+            posy++;
         }
-//        while(true)
-//        {
-//            int posx=0;
-//            for(int i=0;i<nodes;i++)
-//                if(du[i]==0)
-//                {
-//                    this->resultGraph->setpos(names.at(i),posx*40+posy*5,posy*40);
-//                    //qDebug()<<i<<" "<<posx<<" "<<posy;
-//                    du[i]=-posy-1;
-//                    posx++;
-//                }
-//            if(posx==0)break;
-//            for(int i=0;i<nodes;i++)
-//                if(du[i]==-posy-1)
-//                {
-//                    for(int j=0;j<nodes;j++)
-//                        if(G[i][j]==1)du[j]--;
-//                }
-//            posy++;
-//        }
-    }    
+    }
 
 }
+
 
 
 // huangxiaoze--start
@@ -187,6 +153,12 @@ void ResultView::on_show_network_file(QString network_filepath)
     QJsonObject * jsonObj = Util::parseJsonFile_python(network_filepath);//Util::parseJsonFile(jsonFile);
     this->showNetwork(jsonObj);
 }
+
+void ResultView::on_show_network(PyObject* net) {
+    QJsonObject *jsonObj = Util::parsePyNetwork(net);
+    this->showNetwork(jsonObj);
+}
+
 
 void ResultView::showNetwork(QJsonObject *jsonObj) {
 //    return;

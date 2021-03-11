@@ -13,6 +13,7 @@
 #include <QLabel>
 #include "util.h"
 #include "init_python.h"
+#include "marabouverifythread.h"
 
 MainUI::MainUI(QWidget *parent) :
     QMainWindow(parent),
@@ -123,9 +124,11 @@ void MainUI::initUI()
     connect(this->settingView,SIGNAL(SIGNAL_run_reluplex(int,bool,const QString)),this,SLOT(run_reluplex(int,bool,const QString)));
     connect(this->settingView,SIGNAL(SIGNAL_run_planet(const QString)),this,SLOT(run_planet(const QString)));
     // huangxiaoze --- start
-    connect(this->settingView, SIGNAL(SIGNAL_importNetwork(QString)), this->resultView, SLOT(on_show_network_file(QString)));
+//    connect(this->settingView, SIGNAL(SIGNAL_importNetwork(QString)), this->resultView, SLOT(on_show_network_file(QString)));
+    connect(this->settingView, SIGNAL(SIGNAL_importNetwork(QString)), this, SLOT(on_importNetwork(QString)));
+    connect(this, SIGNAL(SIGNAL_show_network(PyObject*)), this->resultView, SLOT(on_show_network(PyObject*)));
     connect(this->settingView, SIGNAL(SIGNAL_run_abstract(QJsonObject)), this, SLOT(on_run_abstract(QJsonObject)));
-
+    connect(this->settingView, SIGNAL(SIGNAL_verify_by_marabou(QJsonObject)), this, SLOT(on_verify_by_marabou(QJsonObject)));
     // huangxiaoze --- end
     //program out
     connect(this->settingView,SIGNAL(SIGNAL_programout(const QString)),this,SLOT(on_updateProgramOut(const QString)));
@@ -136,8 +139,19 @@ void MainUI::initUI()
 }
 
 // huangxiaoze -- start
+void MainUI::on_importNetwork(QString filepath) {
+    qDebug() << "MainUI::on_importNetwork(QString)" << endl;
+    this->origin_net_ = Util::read_network_file(filepath);
+    if (this->origin_net_ != nullptr) {
+        emit SIGNAL_show_network(this->origin_net_);
+    }
+}
 
 void MainUI::on_run_abstract(QJsonObject parameter) {
+    if (this->origin_net_ == nullptr) {
+        qDebug() << "MainUI::on_run_abstract: net_ is null" << endl;
+        return;
+    }
     PyRun_SimpleString("import sys");
     PyRun_SimpleString("sys.path.append('./')");
 
@@ -149,8 +163,8 @@ void MainUI::on_run_abstract(QJsonObject parameter) {
         qDebug() << "get abstract success" << endl;
     }
 
-    PyObject *arg = Py_BuildValue("(s, s, i, s)",
-                                    parameter.value("filepath").toString().toStdString().c_str(),
+    PyObject *arg = Py_BuildValue("(O, s, i, s)",
+                                    this->origin_net_,
                                     parameter.value("abstract_type").toString().toStdString().c_str(),
                                     parameter.value("abstraction_sequence").toString().toInt(),
                                     parameter.value("property_id").toString().toStdString().c_str()
@@ -161,27 +175,41 @@ void MainUI::on_run_abstract(QJsonObject parameter) {
     } else {
         qDebug() << "arg is ok" << endl;
     }
-    PyObject *net = PyEval_CallObject(abstract, arg);
+    this->abstract_net_ = PyEval_CallObject(abstract, arg);
 
-    PyObject *pFunc2 = python.getFunc("core.nnet.read_nnet", "get_network_in_json_str");
-    PyObject *pArg2 = Py_BuildValue("(O)", net);
-    PyObject *str = PyEval_CallObject(pFunc2, pArg2);
-    char *content = NULL;
-    PyArg_Parse(str,"s", &content);
+    QJsonObject *result = Util::parsePyNetwork(this->abstract_net_);
 
-    QString value = content;
-
-    QJsonParseError parseJsonErr;
-    QJsonDocument document = QJsonDocument::fromJson(value.toUtf8(),&parseJsonErr);
-    if(!(parseJsonErr.error == QJsonParseError::NoError))
-    {
-        qDebug()<<"解析json文件错误！";
-        return;
-    }
-    QJsonObject *  result = new QJsonObject();
-    *result = document.object();
     this->resultView->showNetwork(result);
 }
+
+void MainUI::on_verify_by_marabou(QJsonObject parameter) {
+    qDebug() << "MainUI::on_verify_without_ar()" << endl;
+//    PyObject* verify_without_ar_func = python.getFunc("core.prodeep.prodeep", "verify_without_ar");
+//    if (verify_without_ar_func == nullptr) {
+//        qDebug() << "verify_without_ar function not found" << endl;
+//        return;
+//    }
+
+//    PyObject *arg = Py_BuildValue("(O, s)", this->origin_net_,
+//                                  parameter.value("property_id").toString().toStdString().c_str());
+//    PyObject *ret = PyEval_CallObject(verify_without_ar_func, arg);
+    MarabouVerifyThread *verify_thread = new MarabouVerifyThread(this);
+    connect(verify_thread, SIGNAL(SINGAL_finish_verify(PyObject*)), this, SLOT(on_marabou_verify_finished(PyObject*)));
+
+    verify_thread->setParameter(this->origin_net_, parameter);
+    verify_thread->start();
+
+}
+
+void MainUI::on_marabou_verify_finished(PyObject* ret) {
+    if (ret == nullptr) {
+        qDebug() << "ret is null..." << endl;
+        return;
+    }
+
+    qDebug() << "finished verify" << endl;
+}
+
 
 // huangxiaoze -- end
 

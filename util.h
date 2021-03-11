@@ -1,6 +1,7 @@
 #ifndef UTIL_H
 #define UTIL_H
 
+#include <Python.h>
 #include <QString>
 #include <QWidget>
 #include <QJsonDocument>
@@ -15,8 +16,11 @@ public:
     Util();
     static int createFile(const QString filePath, const QString fileName);
     static QJsonObject * parseJsonFile(const QString fileName);
+//    huangxiaoze --- start
     static QJsonObject * parseJsonFile_python(const QString fileName);
-
+    static PyObject* read_network_file(QString filepath);
+    static QJsonObject* parsePyNetwork(PyObject*);
+//    huangxiaoze ---- end
 };
 
 

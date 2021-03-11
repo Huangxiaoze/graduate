@@ -82,9 +82,14 @@ private slots:
     void on_Run_DeepG(const QString binpath,const QString configdir);
     void on_Run_ERAN(const QString network,const QString dataset,const QString configdir,int paramnum,int inputnum);
 
-    // huangxiaoze --- start
+// huangxiaoze --- start
     void on_run_abstract(QJsonObject);
-    // huangxiaoze --- end
+    void on_verify_by_marabou(QJsonObject);
+    void on_importNetwork(QString);
+    void on_marabou_verify_finished(PyObject*);
+signals:
+    void SIGNAL_show_network(PyObject*);
+// huangxiaoze --- end
 
 private:
     Ui::MainUI * ui;
@@ -94,7 +99,8 @@ private:
     ResultView * resultView;
     QLabel *statusBarLabel=new QLabel();
     int verifiednum,robustnum,curbatch=0;    
-
+    PyObject *origin_net_ = nullptr;
+    PyObject *abstract_net_ = nullptr;
 
     BackEnd *backend,
             *deepgbackend,

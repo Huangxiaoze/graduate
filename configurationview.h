@@ -10,8 +10,8 @@
 #define UI_EPSILON_PRECISION 3
 #define UI_UNSMOOTHNESS_PRECISION 3
 
-#include <QWidget>
 #include "project.h"
+#include <QWidget>
 
 namespace Ui {
 class ConfigurationView;

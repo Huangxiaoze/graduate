@@ -1,6 +1,7 @@
 #ifndef RESULTVIEW_H
 #define RESULTVIEW_H
 
+#include <Python.h>
 #include <QWidget>
 #include "comparerelation.h"
 #include "networkgraph.h"
@@ -30,6 +31,7 @@ public slots:
     void showlayer(int layer);
     // huangxiaoze --- start
     void on_show_network_file(QString filepath);
+    void on_show_network(PyObject*);
     // huangxiaoze --- end
 
 signals:

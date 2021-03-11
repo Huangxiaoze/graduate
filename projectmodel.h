@@ -1,9 +1,9 @@
 #ifndef PROJECTMODEL_H
 #define PROJECTMODEL_H
 
-#include <QAbstractItemModel>
-#include "treenode.h"
 #include "project.h"
+#include "treenode.h"
+#include <QAbstractItemModel>
 
 class ProjectModel : public QAbstractItemModel
 {

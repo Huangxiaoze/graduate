@@ -1,8 +1,8 @@
 #ifndef RELUPLEXCFG_H
 #define RELUPLEXCFG_H
 
-#include <QWidget>
 #include "project.h"
+#include <QWidget>
 
 namespace Ui {
 class reluplexcfg;

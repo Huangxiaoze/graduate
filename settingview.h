@@ -1,6 +1,7 @@
 #ifndef SETTINGVIEW_H
 #define SETTINGVIEW_H
 
+#include <Python.h>
 #include <QWidget>
 #include "network.h"
 #include "configurationview.h"
@@ -47,6 +48,7 @@ public slots:
     // huangxiaoze---start
     void on_importNetwork(QString);
     void on_run_abstract(QJsonObject);
+    void on_verify_without_ar(QJsonObject);
     // huangxiaoze---end
     void on_importInput();
     void on_Run_DeepG(const QString binpath,const QString configdir);
@@ -69,6 +71,7 @@ public slots:
 signals:
     // huangxiaoze --- start
     void SIGNAL_run_abstract(QJsonObject);
+    void SIGNAL_verify_by_marabou(QJsonObject);
     // huangxiaoze --- end
     void SIGNAL_run();
     void SIGNAL_run_with_augs(const QString inputfilename,const QString network,const QString robustness,const double delta);

@@ -20,6 +20,7 @@ import time
 import argparse
 import pandas as pd
 
+import core.prodeep.prodeep
 # internal imports
 from import_marabou import dynamically_import_marabou
 from core.configuration import consts

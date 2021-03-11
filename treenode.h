@@ -1,9 +1,9 @@
 #ifndef TREENODE_H
 #define TREENODE_H
 
-#include <QList>
 #include "project.h"
 #include "projectitem.h"
+#include <QList>
 
 #define PROJECT_NODE 0
 #define FILE_NODE 1

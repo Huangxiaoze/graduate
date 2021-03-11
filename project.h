@@ -1,11 +1,12 @@
 #ifndef PROJECT_H
 #define PROJECT_H
 
+
+#include "util.h"
 #include <QString>
 #include <QVariant>
 
 //#include "pluginconfigure.h"
-#include "util.h"
 
 #define ROBUSTNESS_INF 0
 #define ROBUSTNESS_BRI 1

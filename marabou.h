@@ -2,6 +2,8 @@
 #define MARABOU_H
 
 #include "project.h"
+#include "marabouverifythread.h"
+
 #include <QWidget>
 #include <QString>
 #include <QJsonObject>
@@ -20,12 +22,16 @@ public:
 signals:
     void SIGNAL_import_network(QString);
     void SIGNAL_run_abstract(QJsonObject);
+    void SIGNAL_verify_by_marabou(QJsonObject);
 public slots:
     void on_import_network();
     void on_run_abstract();
     void on_as_slider_valueChange(int);
     void on_ar_status(int);
+    void on_verify_without_ar();
+    void on_verify_with_ar();
 private:
+    QJsonObject getParameter();
     void connect_S_L();
     Ui::Marabou *ui;
     Project *project = nullptr;

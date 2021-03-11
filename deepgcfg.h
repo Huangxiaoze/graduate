@@ -1,8 +1,8 @@
 #ifndef DEEPGCFG_H
 #define DEEPGCFG_H
 
-#include <QWidget>
 #include "project.h"
+#include <QWidget>
 
 namespace Ui {
 class DeepGcfg;

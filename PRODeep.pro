@@ -32,6 +32,7 @@ SOURCES += \
     main.cpp \
     mainui.cpp \
     marabou.cpp \
+    marabouverifythread.cpp \
     matrix.cpp \
     network.cpp \
     networkfile.cpp \
@@ -68,6 +69,7 @@ HEADERS += \
     loadingwidget.h \
     mainui.h \
     marabou.h \
+    marabouverifythread.h \
     matrix.h \
     network.h \
     networkfile.h \

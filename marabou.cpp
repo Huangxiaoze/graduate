@@ -27,6 +27,8 @@ void Marabou::connect_S_L() {
     connect(this->ui->run_abstract, SIGNAL(clicked()), this, SLOT(on_run_abstract()));
     connect(this->ui->abstraction_sequence_slider, SIGNAL(valueChanged(int)), this, SLOT(on_as_slider_valueChange(int)));
     connect(this->ui->ar_checkbox, SIGNAL(stateChanged(int)), this, SLOT(on_ar_status(int)));
+    connect(this->ui->verify_without_ar, SIGNAL(clicked()), this, SLOT(on_verify_without_ar()));
+    connect(this->ui->verify_with_ar, SIGNAL(clicked()), this, SLOT(on_verify_with_ar()));
 }
 
 void Marabou::on_ar_status(int s) {
@@ -42,27 +44,56 @@ void Marabou::on_import_network() {
     QString file = QFileDialog::getOpenFileName(this,tr("Choose Network File"), this->project->getPath());
     if (!file.isEmpty()) {
         this->ui->network_lineEdit->setText(file);
+        emit SIGNAL_import_network(file);
     }
-    emit SIGNAL_import_network(file);
 }
 
 void Marabou::on_run_abstract() {
-    QString file = this->ui->network_lineEdit->text();
-    QString abstract_type = this->ui->abstract_type_combobox->currentText();
-    QString as = QString("%1").arg(this->ui->abstraction_sequence_slider->value());
-    QString property = this->ui->property_combobox->currentText();
+    QJsonObject parameter = getParameter();
+    QString file = parameter.value("filepath").toString();
     if (file.isEmpty()) {
         QMessageBox::warning(this, "Warning", "Please select Network file.");
         return;
     }
-    QJsonObject parameter;
-    parameter["filepath"] = file;
-    parameter["abstract_type"] = abstract_type;
-    parameter["abstraction_sequence"] = as;
-    parameter["property_id"] = property;
     emit SIGNAL_run_abstract(parameter);
 }
 
 void Marabou::on_as_slider_valueChange(int value) {
     this->ui->as_value->setText(QString("%1").arg(value));
 }
+
+void Marabou::on_verify_without_ar() {
+    QJsonObject parameter = getParameter();
+    QString file = parameter.value("filepath").toString();
+    if (file.isEmpty()) {
+        QMessageBox::warning(this, "Warning", "Please select Network file.");
+        return;
+    }
+    parameter["verify_mode"] = VERIFY_WITHOUT_AR;
+    emit SIGNAL_verify_by_marabou(parameter);
+}
+
+void Marabou::on_verify_with_ar() {
+    QJsonObject parameter = getParameter();
+    QString file = parameter.value("filepath").toString();
+    if (file.isEmpty()) {
+        QMessageBox::warning(this, "Warning", "Please select Network file.");
+        return;
+    }
+    parameter["verify_mode"] = VERIFY_WITH_AR;
+    emit SIGNAL_verify_by_marabou(parameter);
+}
+
+QJsonObject Marabou::getParameter() {
+    QString file = this->ui->network_lineEdit->text();
+    QString abstract_type = this->ui->abstract_type_combobox->currentText();
+    QString as = QString("%1").arg(this->ui->abstraction_sequence_slider->value());
+    QString property = this->ui->property_combobox->currentText();
+    QJsonObject parameter;
+    parameter["filepath"] = file;
+    parameter["abstract_type"] = abstract_type;
+    parameter["abstraction_sequence"] = as;
+    parameter["property_id"] = property;
+    return parameter;
+}
+

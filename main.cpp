@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     python.importFunc("core.nnet.read_nnet", "network_from_nnet_file");
     python.importFunc("core.nnet.read_nnet", "get_network_in_json_str");
     python.importFunc("core.prodeep.prodeep", "abstract");
-
+    python.importFunc("core.prodeep.prodeep", "verify_without_ar");
     qDebug() << "here" << endl;
 
     QDir tmpPath = QDir::tempPath();
@@ -76,5 +76,6 @@ int main(int argc, char *argv[])
 
     int ret = a.exec();
     Py_Finalize();
+    qDebug() << "exit......." << endl;
     return ret;
 }
