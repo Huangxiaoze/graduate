@@ -24,7 +24,8 @@ int main(int argc, char *argv[])
     python.importFunc("core.nnet.read_nnet", "get_network_in_json_str");
     python.importFunc("core.prodeep.prodeep", "abstract");
     python.importFunc("core.prodeep.prodeep", "verify_without_ar");
-    qDebug() << "here" << endl;
+    python.importFunc("core.prodeep.prodeep", "verify_with_ar");
+    qDebug() << "=========Finish init Python environment=========" << endl;
 
     QDir tmpPath = QDir::tempPath();
 

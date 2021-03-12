@@ -13,6 +13,7 @@
 
 #include <QJsonObject>
 #include <QLabel>
+#include <QThread>
 
 
 #define JSON_RESULT_FILE "VerifyResult.json"
@@ -20,7 +21,7 @@
 #define PYTHON_EXECUTABLE "/home/demo/miniconda3/bin/python"
 #define DEEPG_ROOT "/home/demo/Library/deepg"
 #define PLANET_DIR "/home/demo/Library/planet/casestudies/MNIST"
-#define Reluplex_ROOT "/home/demo/Library/reluplex/ReluplexCav2017-master"
+#define Reluplex_ROOT "/home/xiaoze/Desktop/PRODeep_CEGAR/ReluplexCav2017"
 
 #define DEEPG_BACKEND "./build/deepg_constraints"
 #define DEEPG_ERAN_BACKEND (std::string(PYTHON_EXECUTABLE) + std::string(" deepg.py")).c_str()
@@ -86,7 +87,7 @@ private slots:
     void on_run_abstract(QJsonObject);
     void on_verify_by_marabou(QJsonObject);
     void on_importNetwork(QString);
-    void on_marabou_verify_finished(PyObject*);
+    void on_marabou_verify_finished(PyObject*, QThread*);
 signals:
     void SIGNAL_show_network(PyObject*);
 // huangxiaoze --- end

@@ -20,7 +20,7 @@ import time
 import argparse
 import pandas as pd
 
-import core.prodeep.prodeep
+import core.prodeep.prodeep as prodeep
 # internal imports
 from import_marabou import dynamically_import_marabou
 from core.configuration import consts
@@ -122,9 +122,6 @@ def one_experiment(
     #     test_property["output"][i][1]["Lower"] = lower_bound
     net = network_from_nnet_file(fullname)
     print(f"size={len(net.layers)}")
-
-    net, test_property = reduce_property_to_basic_form(network=net, test_property=test_property)
-
     # mechanism is vanilla marabou
     if mechanism == "marabou":
         print("query using vanilla Marabou")
@@ -216,6 +213,7 @@ def one_experiment(
             print("query time after A and {} R steps is {}".format(num_of_refine_steps, t5-t4))
             debug_print(net.get_general_net_data())
             if query_result == "UNSAT":
+                print("+"*100)
                 # if always y'<3.99 then also always y<3.99
                 if verbose:
                     print("UNSAT (finish)")

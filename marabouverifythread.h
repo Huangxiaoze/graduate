@@ -18,7 +18,7 @@ public:
     void setParameter(PyObject* net, QJsonObject parameter);
 
 signals:
-    void SIGNAL_finish_verify(PyObject*);
+    void SIGNAL_finish_verify(PyObject*, QThread*);
 
 protected:
     void run() override;

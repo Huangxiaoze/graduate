@@ -107,8 +107,12 @@ QJsonObject* Util::parsePyNetwork(PyObject *net) {
     PyObject *pFunc2 = python.getFunc("core.nnet.read_nnet", "get_network_in_json_str");
     PyObject *pArg2 = Py_BuildValue("(O)", net);
     PyObject *str = PyEval_CallObject(pFunc2, pArg2);
+    return parseJsonPyObject(str);
+}
+
+QJsonObject* Util::parseJsonPyObject(PyObject *obj) {
     char *content = NULL;
-    PyArg_Parse(str,"s", &content);
+    PyArg_Parse(obj,"s", &content);
 //    qDebug() << content << endl;
     QString value = content;
     QJsonParseError parseJsonErr;

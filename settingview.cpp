@@ -74,7 +74,7 @@ void SettingView::initMarabouView_S_L_Connection() {
     qDebug() << "SettingView::initMarabouView_S_L_Connection" << endl;
     connect(this->marabou, SIGNAL(SIGNAL_import_network(QString)), this, SLOT(on_importNetwork(QString)));
     connect(this->marabou, SIGNAL(SIGNAL_run_abstract(QJsonObject)), this, SLOT(on_run_abstract(QJsonObject)));
-    connect(this->marabou, SIGNAL(SIGNAL_verify_by_marabou(QJsonObject)), this, SLOT(on_verify_without_ar(QJsonObject)));
+    connect(this->marabou, SIGNAL(SIGNAL_verify_by_marabou(QJsonObject)), this, SLOT(on_verify_by_marabou(QJsonObject)));
 }
 
 void SettingView::on_importNetwork(QString file) {
@@ -86,8 +86,8 @@ void SettingView::on_run_abstract(QJsonObject parameter) {
     emit SIGNAL_run_abstract(parameter);
 }
 
-void SettingView::on_verify_without_ar(QJsonObject parameter) {
-    emit SIGNAL_verify_without_ar(parameter);
+void SettingView::on_verify_by_marabou(QJsonObject parameter) {
+    emit SIGNAL_verify_by_marabou(parameter);
 }
 // huangxiaoze---end
 

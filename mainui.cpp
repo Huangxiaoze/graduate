@@ -176,7 +176,6 @@ void MainUI::on_run_abstract(QJsonObject parameter) {
         qDebug() << "arg is ok" << endl;
     }
     this->abstract_net_ = PyEval_CallObject(abstract, arg);
-
     QJsonObject *result = Util::parsePyNetwork(this->abstract_net_);
 
     this->resultView->showNetwork(result);
@@ -194,20 +193,31 @@ void MainUI::on_verify_by_marabou(QJsonObject parameter) {
 //                                  parameter.value("property_id").toString().toStdString().c_str());
 //    PyObject *ret = PyEval_CallObject(verify_without_ar_func, arg);
     MarabouVerifyThread *verify_thread = new MarabouVerifyThread(this);
-    connect(verify_thread, SIGNAL(SINGAL_finish_verify(PyObject*)), this, SLOT(on_marabou_verify_finished(PyObject*)));
+    connect(verify_thread, SIGNAL(SIGNAL_finish_verify(PyObject*, QThread*)), this, SLOT(on_marabou_verify_finished(PyObject*, QThread*)));
 
     verify_thread->setParameter(this->origin_net_, parameter);
     verify_thread->start();
 
 }
 
-void MainUI::on_marabou_verify_finished(PyObject* ret) {
+void MainUI::on_marabou_verify_finished(PyObject* ret, QThread* verify_thread) {
     if (ret == nullptr) {
         qDebug() << "ret is null..." << endl;
+        delete verify_thread;
         return;
     }
 
-    qDebug() << "finished verify" << endl;
+    QJsonObject *res = Util::parseJsonPyObject(ret);
+    double abstraction_time = res->value("abstraction_time").toDouble();
+    QString query_result = res->value("query_result").toString();
+    this->outView->clear();
+    this->outView->setProgramText(query_result);
+
+    qDebug() << *res << endl;
+
+    if (verify_thread) {
+        delete verify_thread;
+    }
 }
 
 

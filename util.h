@@ -20,6 +20,7 @@ public:
     static QJsonObject * parseJsonFile_python(const QString fileName);
     static PyObject* read_network_file(QString filepath);
     static QJsonObject* parsePyNetwork(PyObject*);
+    static QJsonObject* parseJsonPyObject(PyObject*);
 //    huangxiaoze ---- end
 };
 

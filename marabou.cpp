@@ -29,6 +29,7 @@ void Marabou::connect_S_L() {
     connect(this->ui->ar_checkbox, SIGNAL(stateChanged(int)), this, SLOT(on_ar_status(int)));
     connect(this->ui->verify_without_ar, SIGNAL(clicked()), this, SLOT(on_verify_without_ar()));
     connect(this->ui->verify_with_ar, SIGNAL(clicked()), this, SLOT(on_verify_with_ar()));
+    connect(this->ui->refinement_sequence_slider, SIGNAL(valueChanged(int)), this, SLOT(on_rs_slider_valueChange(int)));
 }
 
 void Marabou::on_ar_status(int s) {
@@ -62,6 +63,10 @@ void Marabou::on_as_slider_valueChange(int value) {
     this->ui->as_value->setText(QString("%1").arg(value));
 }
 
+void Marabou::on_rs_slider_valudeChange(int value) {
+    this->ui->rs_value->setText(QString("%1").arg(value));
+}
+
 void Marabou::on_verify_without_ar() {
     QJsonObject parameter = getParameter();
     QString file = parameter.value("filepath").toString();
@@ -87,13 +92,17 @@ void Marabou::on_verify_with_ar() {
 QJsonObject Marabou::getParameter() {
     QString file = this->ui->network_lineEdit->text();
     QString abstract_type = this->ui->abstract_type_combobox->currentText();
+    QString refinement_type = this->ui->refinement_type_combobox->currentText();
     QString as = QString("%1").arg(this->ui->abstraction_sequence_slider->value());
+    QString rs = this->ui->rs_value->text();
     QString property = this->ui->property_combobox->currentText();
     QJsonObject parameter;
     parameter["filepath"] = file;
     parameter["abstract_type"] = abstract_type;
     parameter["abstraction_sequence"] = as;
+    parameter["refinement_sequence"] = rs;
     parameter["property_id"] = property;
+    parameter["refinement_type"] = refinement_type;
     return parameter;
 }
 
