@@ -117,6 +117,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
+    README.md \
     core/__init__.py \
     core/__pycache__/__init__.cpython-38.pyc \
     core/abstraction/__init__.py \
