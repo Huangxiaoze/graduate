@@ -75,6 +75,7 @@ void SettingView::initMarabouView_S_L_Connection() {
     connect(this->marabou, SIGNAL(SIGNAL_import_network(QString)), this, SLOT(on_importNetwork(QString)));
     connect(this->marabou, SIGNAL(SIGNAL_run_abstract(QJsonObject)), this, SLOT(on_run_abstract(QJsonObject)));
     connect(this->marabou, SIGNAL(SIGNAL_verify_by_marabou(QJsonObject)), this, SLOT(on_verify_by_marabou(QJsonObject)));
+    connect(this, SIGNAL(SIGNAL_abstract_finished()), this->marabou, SLOT(on_abstract_finished()));
 }
 
 void SettingView::on_importNetwork(QString file) {
@@ -89,6 +90,11 @@ void SettingView::on_run_abstract(QJsonObject parameter) {
 void SettingView::on_verify_by_marabou(QJsonObject parameter) {
     emit SIGNAL_verify_by_marabou(parameter);
 }
+
+void SettingView::on_abstract_finished() {
+    emit SIGNAL_abstract_finished();
+}
+
 // huangxiaoze---end
 
 void SettingView::addTool(QString tool,Project * project)
@@ -241,6 +247,12 @@ void SettingView::removeTool(QString tool)
         this->ui->setting->removeTab(this->ui->setting->indexOf(this->reluplexconfig));
         delete this->reluplexconfig;
         this->reluplexconfig=nullptr;
+    } else if (tool == TOOL_MARABOU) {
+        if (this->marabou) {
+            this->ui->setting->removeTab(this->ui->setting->indexOf(this->marabou));
+            delete this->marabou;
+            this->marabou = nullptr;
+        }
     }
 }
 

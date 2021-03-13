@@ -95,7 +95,9 @@ def one_experiment(
         property_id=consts.PROPERTY_ID, verbose=consts.VERBOSE
 ):
     test_property = get_test_property_acas(property_id)
+    print('---(1)-->', test_property)
     dynamically_import_marabou(query_type=test_property["type"])
+    print('---(2)-->', test_property)
     from core.nnet.read_nnet import network_from_nnet_file
     from core.abstraction.naive import abstract_network
     from core.abstraction.alg2 import heuristic_abstract_alg2
@@ -122,6 +124,8 @@ def one_experiment(
     #     test_property["output"][i][1]["Lower"] = lower_bound
     net = network_from_nnet_file(fullname)
     print(f"size={len(net.layers)}")
+    net, test_property = reduce_property_to_basic_form(network=net, test_property=test_property)
+    print('---(3)-->', test_property)
     # mechanism is vanilla marabou
     if mechanism == "marabou":
         print("query using vanilla Marabou")
@@ -183,8 +187,9 @@ def one_experiment(
         saveNetWork(net, "after_abstract.txt")
         saveNetwork_json(net, "nework.after.json")
         print("ABSTRACT END.......................................")
+        print('---(4)-->', test_property)
         print("abstraction_time consume: ", abstraction_time)
-
+        print('\n\n\n')
 
         num_of_refine_steps = 0
         ar_times = []

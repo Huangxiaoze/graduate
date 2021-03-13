@@ -23,16 +23,15 @@ public:
     void showNetworkGraph();
     // huangxiaoze --- start
     void showNetwork(QJsonObject *jsonObj);
-    // huangxiaoze --- end
 public slots:
+    void on_show_network_file(QString filepath);
+    void on_show_network(PyObject*);
+    // huangxiaoze --- end
+
     void removeSubTab(int index);
     void on_addNetworkGraph(const QString name, const QString layertype,
                             int layernum, int layerwhich);
     void showlayer(int layer);
-    // huangxiaoze --- start
-    void on_show_network_file(QString filepath);
-    void on_show_network(PyObject*);
-    // huangxiaoze --- end
 
 signals:
     void updateNetworkNodeStatus(QJsonObject obj);

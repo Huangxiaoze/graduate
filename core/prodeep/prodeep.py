@@ -28,16 +28,14 @@ from core.refinement.refine import refine
 def abstract(net, abstraction_type, abstraction_sequence, property_id=consts.PROPERTY_ID, verbose=consts.VERBOSE
 ):
     net = copy.deepcopy(net)
+    net_data_1 = net.get_general_net_data()
     # print(net, abstraction_type, abstraction_sequence, property_id)
     test_property = get_test_property_acas(property_id)
     dynamically_import_marabou(query_type=test_property["type"])
-
-    # for i in range(len(test_property["output"])):
-    #     test_property["output"][i][1]["Lower"] = lower_bound
-
     net, test_property = reduce_property_to_basic_form(network=net, test_property=test_property)
-    print("==========================>reduce", net.get_general_net_data())
-
+    orig_net = copy.deepcopy(net)
+    net_data_2 = net.get_general_net_data()
+    start = time.time()
     if abstraction_type == "complete":
         net = abstract_network(net)
     elif abstraction_type == "heuristic_alg2":
@@ -61,12 +59,22 @@ def abstract(net, abstraction_type, abstraction_sequence, property_id=consts.PRO
     else:
         print("unknown abstraction")
         raise NotImplementedError("unknown abstraction")
-    print("ABSTRACT END.......................................")
-    return net
+    finished = time.time()
+    consume = finished - start
+    net_data_3 = net.get_general_net_data()
+    output = {
+            "abstraction_type" : abstraction_type,
+            "abstraction_sequence" : str(abstraction_sequence),
+            "property_id" : property_id,
+            "abstract_consume" : str(consume),
+            "net_input" : json.dumps(net_data_1),
+            "net_reduce_property" : json.dumps(net_data_2),
+            "net_abstract" : json.dumps(net_data_3)
+        }
+    return (net, orig_net, test_property, json.dumps(output))
 
 def verify_without_ar(net, property_id=consts.PROPERTY_ID):
     print("query using vanilla Marabou")
-    return "hello, world"
     test_property = get_test_property_acas(property_id)
     dynamically_import_marabou(query_type=test_property["type"])
     net, test_property = reduce_property_to_basic_form(network=net, test_property=test_property)
@@ -92,53 +100,25 @@ def verify_without_ar(net, property_id=consts.PROPERTY_ID):
     return json.dumps(res)
 
 
-def verify_with_ar(net, refinement_type, abstraction_type, refinement_sequence,
+def verify_with_ar(abstract_net, orig_net, test_property, refinement_type, abstraction_type, refinement_sequence,
                       abstraction_sequence, property_id=consts.PROPERTY_ID,
                       verbose=consts.VERBOSE
     ):
     try:
-        net = copy.deepcopy(net)
-        print(refinement_type, abstraction_type, refinement_sequence,
-              abstraction_sequence, property_id)
+        print(test_property)
         # mechanism is marabou_with_ar
-        test_property = get_test_property_acas(property_id)
         dynamically_import_marabou(query_type=test_property["type"])
 
-        net, test_property = reduce_property_to_basic_form(network=net, test_property=test_property)
-        orig_net = copy.deepcopy(net)
-
-        t2 = time.time()
-        if abstraction_type == "complete":
-            net = abstract_network(net)
-        elif abstraction_type == "heuristic_alg2":
-            net = heuristic_abstract_alg2(
-                network=net,
-                test_property=test_property,
-                sequence_length=abstraction_sequence
-            )
-        elif abstraction_type == "heuristic_random":
-            net = heuristic_abstract_random(
-                network=net,
-                test_property=test_property,
-                sequence_length=abstraction_sequence
-            )
-        # elif abstraction_type == "heuristic_clustering":
-        #     net = heuristic_abstract_clustering(
-        #         network=net,
-        #         test_property=test_property,
-        #         sequence_length=abstraction_sequence
-        #     )
-        else:
-            print("unknown abstraction")
-            raise NotImplementedError("unknown abstraction")
-        abstraction_time = time.time() - t2
-        print("abstraction_time consume: ", abstraction_time)
+        net = copy.deepcopy(abstract_net)
+        orig_net = copy.deepcopy(orig_net)
+        test_property = copy.deepcopy(test_property)
 
         num_of_refine_steps = 0
         ar_times = []
         ar_sizes = []
         refine_sequence_times = []
         spurious_examples = []
+
         while True:  # CEGAR / CETAR method
             t4 = time.time()
             vars1, stats1, query_result = get_query(
@@ -223,11 +203,6 @@ def verify_with_ar(net, refinement_type, abstraction_type, refinement_sequence,
 
         t3 = time.time()
 
-        # time to check property on net with marabou using CEGAR
-        total_ar_time = t3 - t2
-        if verbose:
-            print("ar query time = {}".format(total_ar_time))
-
         # time to check property on the last network in CEGAR
         last_net_ar_time = t3 - t4
         if verbose:
@@ -235,15 +210,11 @@ def verify_with_ar(net, refinement_type, abstraction_type, refinement_sequence,
 
         res = {
             "property_id" : property_id,
-            "abstraction_time" : abstraction_time,
             "query_result" : query_result,
             "num_of_refine_steps" : num_of_refine_steps,
-            "total_ar_query_time" : total_ar_time,
             "ar_times" : ar_times,
             "ar_sizes" : ar_sizes,
-            "refine_sequence_times" : refine_sequence_times,
-            "last_net_data" : net.get_general_net_data(),
-            "last_query_time" : last_net_ar_time
+            "refine_sequence_times" : refine_sequence_times
         }
         return json.dumps(res)
     except Exception as e:

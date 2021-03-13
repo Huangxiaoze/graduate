@@ -90,6 +90,7 @@ private slots:
     void on_marabou_verify_finished(PyObject*, QThread*);
 signals:
     void SIGNAL_show_network(PyObject*);
+    void SIGNAL_abstract_finished();
 // huangxiaoze --- end
 
 private:
@@ -102,6 +103,8 @@ private:
     int verifiednum,robustnum,curbatch=0;    
     PyObject *origin_net_ = nullptr;
     PyObject *abstract_net_ = nullptr;
+    PyObject *test_property_ = nullptr;
+    PyObject *abstract_orig_net_ = nullptr;
 
     BackEnd *backend,
             *deepgbackend,

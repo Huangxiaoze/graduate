@@ -130,3 +130,27 @@ ar_sizes : [78]
 refine_sequence_times : []
 last_net_data : {"layer_sizes": {"0": 5, "1": 50, "2": 4, "3": 4, "4": 4, "5": 4, "6": 2, "7": 5}, "num_nodes": 78, "num_layers": 8, "num_hidden_layers": 6}
 last_query_time : 0.007489204406738281
+-------------------------------------------
+net_name : ACASXU_run2a_2_8_batch_2000.nnet
+property_id : adversarial_0
+abstraction_time : 6.193763017654419
+query_result : UNSAT
+num_of_refine_steps : 0
+total_ar_query_time : 6.334850549697876
+ar_times : [0.06521201133728027]
+ar_sizes : [74]
+refine_sequence_times : []
+last_net_data : {"layer_sizes": {"0": 5, "1": 50, "2": 4, "3": 4, "4": 4, "5": 4, "6": 2, "7": 1}, "num_nodes": 74, "num_layers": 8, "num_hidden_layers": 6}
+last_query_time : 0.07212018966674805
+-------------------------------------------
+net_name : ACASXU_run2a_2_8_batch_2000.nnet
+property_id : adversarial_0
+abstraction_time : 9.510228395462036
+query_result : UNSAT
+num_of_refine_steps : 0
+total_ar_query_time : 9.742391347885132
+ar_times : [0.07247614860534668]
+ar_sizes : [74]
+refine_sequence_times : []
+last_net_data : {"layer_sizes": {"0": 5, "1": 50, "2": 4, "3": 4, "4": 4, "5": 4, "6": 2, "7": 1}, "num_nodes": 74, "num_layers": 8, "num_hidden_layers": 6}
+last_query_time : 0.07253718376159668

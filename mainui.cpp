@@ -129,6 +129,7 @@ void MainUI::initUI()
     connect(this, SIGNAL(SIGNAL_show_network(PyObject*)), this->resultView, SLOT(on_show_network(PyObject*)));
     connect(this->settingView, SIGNAL(SIGNAL_run_abstract(QJsonObject)), this, SLOT(on_run_abstract(QJsonObject)));
     connect(this->settingView, SIGNAL(SIGNAL_verify_by_marabou(QJsonObject)), this, SLOT(on_verify_by_marabou(QJsonObject)));
+    connect(this, SIGNAL(SIGNAL_abstract_finished()), this->settingView, SLOT(on_abstract_finished()));
     // huangxiaoze --- end
     //program out
     connect(this->settingView,SIGNAL(SIGNAL_programout(const QString)),this,SLOT(on_updateProgramOut(const QString)));
@@ -169,33 +170,29 @@ void MainUI::on_run_abstract(QJsonObject parameter) {
                                     parameter.value("abstraction_sequence").toString().toInt(),
                                     parameter.value("property_id").toString().toStdString().c_str()
                                   );
-    if (arg == nullptr) {
-        qDebug() << "arg is null" << endl;
-        return;
-    } else {
-        qDebug() << "arg is ok" << endl;
-    }
-    this->abstract_net_ = PyEval_CallObject(abstract, arg);
+    PyObject *ret = PyEval_CallObject(abstract, arg);
+    PyObject *output = nullptr;
+    PyArg_ParseTuple(ret, "OOOO", &this->abstract_net_, &this->abstract_orig_net_, &test_property_, &output);
     QJsonObject *result = Util::parsePyNetwork(this->abstract_net_);
-
     this->resultView->showNetwork(result);
+    QJsonObject *output_json = Util::parseJsonPyObject(output);
+
+    QString output_str = "====================ABSTRACT====================\n";
+    QStringList keys = output_json->keys();
+    for (int i = 0; i < keys.size(); i++) {
+        output_str += keys[i] + " : " + output_json->value(keys[i]).toString() + "\n";
+    }
+    output_str += "=================================================\n";
+    this->outView->appendProgramText(output_str);
+
+    emit SIGNAL_abstract_finished();
 }
 
 void MainUI::on_verify_by_marabou(QJsonObject parameter) {
-    qDebug() << "MainUI::on_verify_without_ar()" << endl;
-//    PyObject* verify_without_ar_func = python.getFunc("core.prodeep.prodeep", "verify_without_ar");
-//    if (verify_without_ar_func == nullptr) {
-//        qDebug() << "verify_without_ar function not found" << endl;
-//        return;
-//    }
-
-//    PyObject *arg = Py_BuildValue("(O, s)", this->origin_net_,
-//                                  parameter.value("property_id").toString().toStdString().c_str());
-//    PyObject *ret = PyEval_CallObject(verify_without_ar_func, arg);
+    qDebug() << "MainUI::on_verify_by_marabou()" << endl;
     MarabouVerifyThread *verify_thread = new MarabouVerifyThread(this);
     connect(verify_thread, SIGNAL(SIGNAL_finish_verify(PyObject*, QThread*)), this, SLOT(on_marabou_verify_finished(PyObject*, QThread*)));
-
-    verify_thread->setParameter(this->origin_net_, parameter);
+    verify_thread->setParameter(this->origin_net_, this->abstract_net_, this->abstract_orig_net_, this->test_property_, parameter);
     verify_thread->start();
 
 }
@@ -209,9 +206,11 @@ void MainUI::on_marabou_verify_finished(PyObject* ret, QThread* verify_thread) {
 
     QJsonObject *res = Util::parseJsonPyObject(ret);
     double abstraction_time = res->value("abstraction_time").toDouble();
-    QString query_result = res->value("query_result").toString();
-    this->outView->clear();
-    this->outView->setProgramText(query_result);
+    QString query_result = "=================================================\n" +
+                           QString("                    ") + res->value("query_result").toString() + "\n" +
+                           "=================================================\n";
+
+    this->outView->appendProgramText(query_result);
 
     qDebug() << *res << endl;
 
@@ -315,9 +314,12 @@ void MainUI::run_reluplex(int timeout,bool withDeepsymbol,const QString paramete
     QString params=QString(" --foreground ")+
             " --signal=SIGQUIT "+
             " "+QString::number(timeout)+"m ";
-    if(withDeepsymbol)params+=QString(" ")+RELUPLEX_WITH_DEEPSYMBOL_BACKEND+" ";else params+=QString(" ")+RELUPLEX_BACKEND+" ";
+    if (withDeepsymbol) {
+        params+=QString(" ")+RELUPLEX_WITH_DEEPSYMBOL_BACKEND+" ";
+    } else {
+        params+=QString(" ")+RELUPLEX_BACKEND+" ";
+    }
     params+=parameters;
-    //qDebug()<<params;
     reluplexbackend->setCurrentParametersList(params);
     this->outView->clear();
     reluplexbackend->run();

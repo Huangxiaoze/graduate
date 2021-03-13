@@ -26,22 +26,17 @@ void Marabou::connect_S_L() {
     connect(this->ui->importNetwork, SIGNAL(clicked()), this, SLOT(on_import_network()));
     connect(this->ui->run_abstract, SIGNAL(clicked()), this, SLOT(on_run_abstract()));
     connect(this->ui->abstraction_sequence_slider, SIGNAL(valueChanged(int)), this, SLOT(on_as_slider_valueChange(int)));
-    connect(this->ui->ar_checkbox, SIGNAL(stateChanged(int)), this, SLOT(on_ar_status(int)));
     connect(this->ui->verify_without_ar, SIGNAL(clicked()), this, SLOT(on_verify_without_ar()));
     connect(this->ui->verify_with_ar, SIGNAL(clicked()), this, SLOT(on_verify_with_ar()));
     connect(this->ui->refinement_sequence_slider, SIGNAL(valueChanged(int)), this, SLOT(on_rs_slider_valueChange(int)));
-}
 
-void Marabou::on_ar_status(int s) {
-    qDebug() << "changeStatus " << this->ui->ar_checkbox->isChecked() << endl;
-    bool checked = this->ui->ar_checkbox->isChecked();
-    this->ui->run_abstract->setDisabled(!checked);
-    this->ui->refine_next->setDisabled(!checked);
-    this->ui->refine_finish->setDisabled(!checked);
+    // ensure abstract has finished when change the abstract parameter
+    connect(this->ui->abstraction_sequence_slider, SIGNAL(valueChanged(int)), this, SLOT(on_change_abstract_parameter()));
+    connect(this->ui->abstract_type_combobox, SIGNAL(currentTextChanged(const QString &)), this, SLOT(on_change_abstract_parameter()));
+    connect(this->ui->property_combobox, SIGNAL(currentTextChanged(const QString &)), this, SLOT(on_change_abstract_parameter()));
 }
 
 void Marabou::on_import_network() {
-    qDebug() << "Marabou" << "on_import_network" << endl;
     QString file = QFileDialog::getOpenFileName(this,tr("Choose Network File"), this->project->getPath());
     if (!file.isEmpty()) {
         this->ui->network_lineEdit->setText(file);
@@ -104,5 +99,13 @@ QJsonObject Marabou::getParameter() {
     parameter["property_id"] = property;
     parameter["refinement_type"] = refinement_type;
     return parameter;
+}
+
+void Marabou::on_change_abstract_parameter() {
+    this->ui->verify_with_ar->setDisabled(true);
+}
+
+void Marabou::on_abstract_finished() {
+    this->ui->verify_with_ar->setDisabled(false);
 }
 

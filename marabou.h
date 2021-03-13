@@ -28,9 +28,10 @@ public slots:
     void on_run_abstract();
     void on_as_slider_valueChange(int);
     void on_rs_slider_valudeChange(int);
-    void on_ar_status(int);
     void on_verify_without_ar();
     void on_verify_with_ar();
+    void on_change_abstract_parameter();
+    void on_abstract_finished();
 private:
     QJsonObject getParameter();
     void connect_S_L();

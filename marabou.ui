@@ -42,20 +42,6 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_7">
-     <item>
-      <widget class="QCheckBox" name="ar_checkbox">
-       <property name="text">
-        <string>Use Abstract and Refine</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="minimumSize">
       <size>
@@ -308,16 +294,6 @@
         </item>
        </layout>
       </item>
-      <item>
-       <widget class="QPushButton" name="run_abstract">
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
-        <property name="text">
-         <string>Run</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
@@ -405,49 +381,22 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <layout class="QHBoxLayout" name="horizontalLayout_7">
      <item>
-      <widget class="QLabel" name="label_3">
-       <property name="maximumSize">
-        <size>
-         <width>50</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Result:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_4">
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>24</height>
-        </size>
-       </property>
+      <widget class="QPushButton" name="run_abstract">
        <property name="styleSheet">
-        <string notr="true">background:rgb(0, 170, 0);border-radius:100%;width:100%;height:100%;margin-right:20px;text-align:center;</string>
+        <string notr="true"/>
        </property>
        <property name="text">
-        <string>SAT</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_8">
-     <item>
-      <widget class="QPushButton" name="verify_without_ar">
-       <property name="text">
-        <string>Verify_without_AR</string>
+        <string>Run Abstract</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="verify_with_ar">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Verify_with_AR</string>
        </property>
@@ -457,6 +406,13 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QPushButton" name="verify_without_ar">
+     <property name="text">
+      <string>Verify_without_AR</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
