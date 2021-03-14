@@ -35,6 +35,7 @@ signals:
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
     void timerEvent(QTimerEvent *event) override;
 #if QT_CONFIG(wheelevent)
     void wheelEvent(QWheelEvent *event) override;
@@ -47,6 +48,7 @@ private:
     int timerId;
     Node *centerNode;
     QMap<QString,Node*> nodesMap;
+    bool ctrl_press = false;
 };
 //! [0]
 

@@ -123,6 +123,15 @@ def one_experiment(
     # for i in range(len(test_property["output"])):
     #     test_property["output"][i][1]["Lower"] = lower_bound
     net = network_from_nnet_file(fullname)
+
+    prodeep.verify_without_ar(net, property_id, saveNetWork, "first.txt")
+    print("+"*100)
+    net1 = network_from_nnet_file(fullname)
+    print(net1 == net)
+    prodeep.verify_without_ar(net1, property_id, saveNetWork, "second.txt")
+
+
+    return
     print(f"size={len(net.layers)}")
     net, test_property = reduce_property_to_basic_form(network=net, test_property=test_property)
     print('---(3)-->', test_property)
@@ -204,13 +213,6 @@ def one_experiment(
                 network=net, test_property=test_property,
                 verbose=consts.VERBOSE
             )
-            print('#'*100)
-            print(f'vars1={vars1}')
-            print('-'*100)
-            print(f'stats1={stats1}')
-            print('-'*100)
-            print(f'query_result={query_result}')
-            print('#'*100)
             t5 = time.time()
             ar_times.append(t5 - t4)
             ar_sizes.append(net.get_general_net_data()["num_nodes"])
@@ -389,6 +391,7 @@ if __name__ == '__main__':
         abstraction_sequence=args.abstraction_sequence,
         results_directory=args.results_directory)
     output = ''
+    pass
     print("------------------------------------------------Output------------------------------------------------")
     for res in one_exp_res:
         print(res)

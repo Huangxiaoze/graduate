@@ -145,11 +145,28 @@ void GraphWidget::keyPressEvent(QKeyEvent *event)
     case Qt::Key_Enter:
         shuffle();
         break;
+    case Qt::Key_Control:
+        ctrl_press = true;
+        break;
     default:
         QGraphicsView::keyPressEvent(event);
     }
 }
 //! [3]
+
+// huangxiaoze -- start
+void GraphWidget::keyReleaseEvent(QKeyEvent *event) {
+    switch (event->key()) {
+    case Qt::Key_Control:
+        ctrl_press = false;
+        break;
+    default:
+        QGraphicsView::keyReleaseEvent(event);
+    }
+}
+
+// huangxiaoze -- end
+
 
 //! [4]
 void GraphWidget::timerEvent(QTimerEvent *event)
@@ -191,7 +208,11 @@ void GraphWidget::timerEvent(QTimerEvent *event)
 //! [5]
 void GraphWidget::wheelEvent(QWheelEvent *event)
 {
-    scaleView(pow((double)2, -event->delta() / 240.0));
+    if (ctrl_press) {
+        scaleView(pow((double)2, -event->delta() / 240.0));
+    } else {
+        QGraphicsView::wheelEvent(event);
+    }
 }
 //! [5]
 #endif

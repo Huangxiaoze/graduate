@@ -25,11 +25,37 @@ from core.utils.marabou_query_utils import reduce_property_to_basic_form, get_qu
 from core.refinement.refine import refine
 
 
+
+def verify_without_ar(net, property_id=consts.PROPERTY_ID, callback=None, filename=""):
+    print("query using vanilla Marabou")
+    net = copy.deepcopy(net)
+    test_property = get_test_property_acas(property_id)
+    dynamically_import_marabou(query_type=test_property["type"])
+    net, test_property = reduce_property_to_basic_form(network=net, test_property=test_property)
+    t0 = time.time()
+    vars1, stats1, query_result = get_query(
+        network=net,
+        test_property=test_property,
+        verbose=consts.VERBOSE
+    )
+
+    t1 = time.time()
+    # time to check property on net with marabou
+    marabou_time = t1 - t0
+    print(f"query time = {marabou_time}")
+
+    res = {
+        "property_id" : property_id,
+        "query_result" : query_result,
+        "orig_query_time" : str(marabou_time),
+        "net_data" : str(net.get_general_net_data()),
+    }
+    return json.dumps(res)
+
 def abstract(net, abstraction_type, abstraction_sequence, property_id=consts.PROPERTY_ID, verbose=consts.VERBOSE
 ):
     net = copy.deepcopy(net)
     net_data_1 = net.get_general_net_data()
-    # print(net, abstraction_type, abstraction_sequence, property_id)
     test_property = get_test_property_acas(property_id)
     dynamically_import_marabou(query_type=test_property["type"])
     net, test_property = reduce_property_to_basic_form(network=net, test_property=test_property)
@@ -73,39 +99,11 @@ def abstract(net, abstraction_type, abstraction_sequence, property_id=consts.PRO
         }
     return (net, orig_net, test_property, json.dumps(output))
 
-def verify_without_ar(net, property_id=consts.PROPERTY_ID):
-    print("query using vanilla Marabou")
-    test_property = get_test_property_acas(property_id)
-    dynamically_import_marabou(query_type=test_property["type"])
-    net, test_property = reduce_property_to_basic_form(network=net, test_property=test_property)
-    t0 = time.time()
-    vars1, stats1, query_result = get_query(
-        network=net,
-        test_property=test_property,
-        verbose=consts.VERBOSE
-    )
-    t1 = time.time()
-    # time to check property on net with marabou
-    marabou_time = t1 - t0
-    print(f"query time = {marabou_time}")
-
-    res = {
-        "net_name" : nnet_filename,
-        "property_id" : property_id,
-        "query_result" : query_result,
-        "orig_query_time" : marabou_time,
-        "net_data" : net.get_general_net_data(),
-    }
-    print(res)
-    return json.dumps(res)
-
-
 def verify_with_ar(abstract_net, orig_net, test_property, refinement_type, abstraction_type, refinement_sequence,
                       abstraction_sequence, property_id=consts.PROPERTY_ID,
                       verbose=consts.VERBOSE
     ):
     try:
-        print(test_property)
         # mechanism is marabou_with_ar
         dynamically_import_marabou(query_type=test_property["type"])
 
@@ -119,6 +117,7 @@ def verify_with_ar(abstract_net, orig_net, test_property, refinement_type, abstr
         refine_sequence_times = []
         spurious_examples = []
 
+        start = time.time()
         while True:  # CEGAR / CETAR method
             t4 = time.time()
             vars1, stats1, query_result = get_query(
@@ -202,7 +201,7 @@ def verify_with_ar(abstract_net, orig_net, test_property, refinement_type, abstr
                     refine_sequence_times.append(t_cur_refine_end - t_cur_refine_start)
 
         t3 = time.time()
-
+        consume = t3 - start;
         # time to check property on the last network in CEGAR
         last_net_ar_time = t3 - t4
         if verbose:
@@ -211,10 +210,11 @@ def verify_with_ar(abstract_net, orig_net, test_property, refinement_type, abstr
         res = {
             "property_id" : property_id,
             "query_result" : query_result,
-            "num_of_refine_steps" : num_of_refine_steps,
-            "ar_times" : ar_times,
-            "ar_sizes" : ar_sizes,
-            "refine_sequence_times" : refine_sequence_times
+            "num_of_refine_steps" : str(num_of_refine_steps),
+            "ar_times" : str(ar_times),
+            "ar_sizes" : str(ar_sizes),
+            "refine_sequence_times" : str(refine_sequence_times),
+            "refinement_consume" : str(consume)
         }
         return json.dumps(res)
     except Exception as e:

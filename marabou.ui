@@ -20,6 +20,12 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>6</number>
+   </property>
+   <property name="sizeConstraint">
+    <enum>QLayout::SetDefaultConstraint</enum>
+   </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
@@ -46,7 +52,7 @@
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>240</height>
+       <height>0</height>
       </size>
      </property>
      <property name="title">
@@ -94,6 +100,9 @@
         </item>
         <item>
          <widget class="QComboBox" name="property_combobox">
+          <property name="currentIndex">
+           <number>9</number>
+          </property>
           <item>
            <property name="text">
             <string>property_1</string>
@@ -359,24 +368,6 @@
         </item>
        </layout>
       </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <item>
-         <widget class="QPushButton" name="refine_next">
-          <property name="text">
-           <string>Next</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="refine_finish">
-          <property name="text">
-           <string>Finish</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
      </layout>
     </widget>
    </item>
@@ -405,14 +396,14 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="verify_without_ar">
+       <property name="text">
+        <string>Verify_without_AR</string>
+       </property>
+      </widget>
+     </item>
     </layout>
-   </item>
-   <item>
-    <widget class="QPushButton" name="verify_without_ar">
-     <property name="text">
-      <string>Verify_without_AR</string>
-     </property>
-    </widget>
    </item>
   </layout>
  </widget>

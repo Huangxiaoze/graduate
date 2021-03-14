@@ -156,10 +156,10 @@ def handle_adversarial(net, test_property) -> Tuple:
     output_name = f"x_{len(net.layers)-1}_0"
     output_node = ARNode(name=output_name, ar_type="", in_edges=[],
                          out_edges=[], activation_func=identity)
-
     # output-node in-edges are the difference of runner_up and winner in-edges
     w_in_edges = sorted(net_winner_node.in_edges, key=lambda x:x.src)
     r_in_edges = sorted(net_runner_up_node.in_edges, key=lambda x:x.src)
+
     assert(len(w_in_edges) == len(r_in_edges))
     for i, w_edge in enumerate(w_in_edges):
         output_node.in_edges.append(
@@ -187,9 +187,7 @@ def reduce_property_to_basic_form(network, test_property) -> Tuple:
     if "type" not in test_property.keys():
         err_msg = f"'type' not in test_property.keys(): {test_property.keys()}"
         raise Exception(err_msg)
-    print("==>[start] ", test_property)
     property_type = test_property["type"]
-    print(f"reduce_property_to_basic_form(): property_type={property_type}")
     if property_type == "basic":
         pass
     elif property_type == "adversarial":
@@ -203,7 +201,6 @@ def reduce_property_to_basic_form(network, test_property) -> Tuple:
     else:
         err_msg = f"property type is not supported: {test_property['type']}"
         raise Exception(err_msg)
-    print("==>[end  ] ", test_property)
     return network, test_property
 
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import json
+import copy
 from typing import Dict
 
 from core.configuration import consts
@@ -759,7 +760,7 @@ def get_test_property_acas(property_id:str=consts.PROPERTY_ID) -> Dict:
     test_property = TEST_PROPERTY_ACAS.get(property_id, None)
     if test_property is None:
         raise Exception(f"wrong property_id: {property_id}")
-    return test_property
+    return copy.deepcopy(test_property)
 
 
 def get_test_property_tiny() -> Dict:

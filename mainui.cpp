@@ -177,12 +177,7 @@ void MainUI::on_run_abstract(QJsonObject parameter) {
     this->resultView->showNetwork(result);
     QJsonObject *output_json = Util::parseJsonPyObject(output);
 
-    QString output_str = "====================ABSTRACT====================\n";
-    QStringList keys = output_json->keys();
-    for (int i = 0; i < keys.size(); i++) {
-        output_str += keys[i] + " : " + output_json->value(keys[i]).toString() + "\n";
-    }
-    output_str += "=================================================\n";
+    QString output_str = Util::getOutputString(output_json, "ABSTRACT");
     this->outView->appendProgramText(output_str);
 
     emit SIGNAL_abstract_finished();
@@ -205,12 +200,9 @@ void MainUI::on_marabou_verify_finished(PyObject* ret, QThread* verify_thread) {
     }
 
     QJsonObject *res = Util::parseJsonPyObject(ret);
-    double abstraction_time = res->value("abstraction_time").toDouble();
-    QString query_result = "=================================================\n" +
-                           QString("                    ") + res->value("query_result").toString() + "\n" +
-                           "=================================================\n";
-
-    this->outView->appendProgramText(query_result);
+    qDebug() << *res << endl;
+    QString output = Util::getOutputString(res, "Verify Result");
+    this->outView->appendProgramText(output);
 
     qDebug() << *res << endl;
 

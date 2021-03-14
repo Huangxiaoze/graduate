@@ -126,3 +126,17 @@ QJsonObject* Util::parseJsonPyObject(PyObject *obj) {
     *result = document.object();
     return result;
 }
+
+QString Util::getOutputString(QJsonObject *jsonObj, const char* title) {
+    QString output_str = "==================================================================================================\n";
+    if (title != nullptr) {
+           output_str += "                                           " + QString(title) +
+                       "\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+    }
+    QStringList keys = jsonObj->keys();
+    for (int i = 0; i < keys.size(); i++) {
+        output_str += keys[i] + " : " + jsonObj->value(keys[i]).toString() + "\n";
+    }
+    output_str += "==================================================================================================\n";
+    return output_str;
+}
