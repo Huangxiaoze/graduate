@@ -129,7 +129,7 @@ def handle_adversarial(net, test_property) -> Tuple:
     with the difference of the winner and runner_up nodes in the original output
     layer.
 
-    # past implementation - theoretically equal to cuurent implementation
+    # past implementation - theoretically equal to current implementation
     # change net to net with additional layer which is the new output layer, that
     # include on node that include the difference of the two nodes whose values
     # are the minimal values wrt the "center-point" of the adversarial propery
@@ -164,8 +164,9 @@ def handle_adversarial(net, test_property) -> Tuple:
     for i, w_edge in enumerate(w_in_edges):
         output_node.in_edges.append(
             Edge(
-                src=w_edge.src, dest=output_node.name,
-                weight=r_in_edges[i].weight - w_edge.weight
+                src = w_edge.src, dest=output_node.name,
+                # weight=r_in_edges[i].weight - w_edge.weight
+                weight = w_edge.weight - r_in_edges[i].weight # modify
             )
         )
 
@@ -176,7 +177,7 @@ def handle_adversarial(net, test_property) -> Tuple:
 
     # test_property["prev_output"] = test_property["output"]
     test_property["output"] = [
-        (0, {"Lower": 0})
+        (0, {"Lower": 0.001})
     ]
     net.generate_name2node_map()
     net.weights = net.generate_weights()

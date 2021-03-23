@@ -15,7 +15,7 @@ from core.utils.debug_utils import debug_print
 from core.utils.verification_properties_utils import (
     get_test_property_acas, is_satisfying_assignment, TEST_PROPERTY_ACAS
 )
-from core.nnet.read_nnet import network_from_nnet_file
+from core.nnet.read_nnet import (network_from_nnet_file, network2rlv)
 from core.abstraction.naive import abstract_network
 from core.abstraction.alg2 import heuristic_abstract_alg2
 from core.abstraction.random_abstract import heuristic_abstract_random
@@ -25,11 +25,38 @@ from core.utils.marabou_query_utils import reduce_property_to_basic_form, get_qu
 from core.refinement.refine import refine
 
 
+def generate_test_property(parameter):
+    test_property = {"type":"adversarial", "input":[], "output":[]}
+    x0 = parameter['inputX0']
+    x1 = parameter['inputX1']
+    x2 = parameter['inputX2']
+    x3 = parameter['inputX3']
+    x4 = parameter['inputX4']
 
-def verify_without_ar(net, property_id=consts.PROPERTY_ID, callback=None, filename=""):
+    delta = parameter['delta']
+
+    output_label = parameter['output_label']
+
+    l = [x0, x1, x2, x3, x4]
+    for i, x in enumerate(l):
+        test_property['input'].append((i, {"Lower": x - delta, "Upper": x + delta}))
+
+    index = int(output_label[-1])
+    for i in range(1, 5):
+        if i - 1 != index:
+            test_property['output'].append((i - 1, {"Lower": -1.0 * i / 10, "Upper": 1.0 * i / 10}))
+        else:
+            test_property['output'].append((i - 1, {"Lower": -0.5, "Upper": 0.5}))
+    return test_property
+
+def verify_without_ar(net, json_content, callback=None, filename=""):
     print("query using vanilla Marabou")
+    print(json_content)
+    parameter = json.loads(json_content)
+    test_property = generate_test_property(parameter)
+
     net = copy.deepcopy(net)
-    test_property = get_test_property_acas(property_id)
+#    test_property = get_test_property_acas(property_id)
     dynamically_import_marabou(query_type=test_property["type"])
     net, test_property = reduce_property_to_basic_form(network=net, test_property=test_property)
     t0 = time.time()
@@ -45,18 +72,22 @@ def verify_without_ar(net, property_id=consts.PROPERTY_ID, callback=None, filena
     print(f"query time = {marabou_time}")
 
     res = {
-        "property_id" : property_id,
         "query_result" : query_result,
         "orig_query_time" : str(marabou_time),
         "net_data" : str(net.get_general_net_data()),
     }
     return json.dumps(res)
 
-def abstract(net, abstraction_type, abstraction_sequence, property_id=consts.PROPERTY_ID, verbose=consts.VERBOSE
-):
+def abstract(net, json_content, verbose=consts.VERBOSE):
+    parameter = json.loads(json_content)
+
+    abstraction_type = parameter['abstract_type'] 
+    abstraction_sequence = int(parameter['abstraction_sequence'])
+    test_property = generate_test_property(parameter)
+
     net = copy.deepcopy(net)
     net_data_1 = net.get_general_net_data()
-    test_property = get_test_property_acas(property_id)
+
     dynamically_import_marabou(query_type=test_property["type"])
     net, test_property = reduce_property_to_basic_form(network=net, test_property=test_property)
     orig_net = copy.deepcopy(net)
@@ -91,12 +122,12 @@ def abstract(net, abstraction_type, abstraction_sequence, property_id=consts.PRO
     output = {
             "abstraction_type" : abstraction_type,
             "abstraction_sequence" : str(abstraction_sequence),
-            "property_id" : property_id,
             "abstract_consume" : str(consume),
             "net_input" : json.dumps(net_data_1),
             "net_reduce_property" : json.dumps(net_data_2),
             "net_abstract" : json.dumps(net_data_3)
         }
+    network2rlv(net, test_property, "network.rlv")
     return (net, orig_net, test_property, json.dumps(output))
 
 def verify_with_ar(abstract_net, orig_net, test_property, refinement_type, abstraction_type, refinement_sequence,
@@ -105,7 +136,7 @@ def verify_with_ar(abstract_net, orig_net, test_property, refinement_type, abstr
     ):
     try:
         # mechanism is marabou_with_ar
-        dynamically_import_marabou(query_type=test_property["type"])
+        dynamically_import_marabou(query_type = test_property["type"])
 
         net = copy.deepcopy(abstract_net)
         orig_net = copy.deepcopy(orig_net)

@@ -1,6 +1,8 @@
 #include "marabouverifythread.h"
 #include <QDebug>
 #include <QMessageBox>
+#include <iostream>
+#include <QJsonDocument>
 MarabouVerifyThread::MarabouVerifyThread(QObject *parent) : QThread(parent)
 {
 
@@ -25,6 +27,9 @@ void MarabouVerifyThread::run() {
     PyObject *arg = nullptr;
     int verify_mode = parameter_.value("verify_mode").toInt();
     qDebug() << "verify_mode=" << verify_mode << endl;
+
+    QString json_content = QString(QJsonDocument(parameter_).toJson());
+
     switch (verify_mode) {
     case VERIFY_WITHOUT_AR:
     {
@@ -34,7 +39,7 @@ void MarabouVerifyThread::run() {
         }
         verify_func = python.getFunc("core.prodeep.prodeep", "verify_without_ar");
         arg = Py_BuildValue("(O, s)", this->origin_net_,
-                                          this->parameter_.value("property_id").toString().toStdString().c_str());
+                                          json_content.toStdString().c_str());
         break;
     }
     case VERIFY_WITH_AR:
@@ -60,8 +65,13 @@ void MarabouVerifyThread::run() {
         break;
     }
 
-    if (verify_func == nullptr || arg == nullptr) {
-        qDebug() << "verify interface is not found or arg construct failure......" << endl;
+    if (verify_func == nullptr) {
+        qDebug() << "verify interface is not found......" << endl;
+        return;
+    }
+
+    if (arg == nullptr) {
+        qDebug() << "arg construct failure.... " << endl;
         return;
     }
 

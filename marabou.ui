@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>567</width>
-    <height>666</height>
+    <height>639</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -19,13 +19,10 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">display:flex;align-items:center;justify-contents:center;flex-direction:column;</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="spacing">
-    <number>6</number>
-   </property>
-   <property name="sizeConstraint">
-    <enum>QLayout::SetDefaultConstraint</enum>
-   </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
@@ -43,6 +40,90 @@
        <property name="text">
         <string>import</string>
        </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <layout class="QVBoxLayout" name="input_vlayout"/>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_17">
+       <item>
+        <widget class="QLabel" name="label_21">
+         <property name="text">
+          <string>DELTA</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSlider" name="delta_slider">
+         <property name="maximum">
+          <number>100</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QDoubleSpinBox" name="delta_spinbox">
+         <property name="decimals">
+          <number>3</number>
+         </property>
+         <property name="maximum">
+          <double>1.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>0.010000000000000</double>
+         </property>
+         <property name="value">
+          <double>0.010000000000000</double>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_18">
+     <item>
+      <widget class="QLabel" name="label_23">
+       <property name="text">
+        <string>output</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="output_combobox">
+       <item>
+        <property name="text">
+         <string>label_0</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>label_1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>label_2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>label_3</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>label_4</string>
+        </property>
+       </item>
       </widget>
      </item>
     </layout>
@@ -372,6 +453,22 @@
     </widget>
    </item>
    <item>
+    <widget class="QLabel" name="result_label">
+     <property name="styleSheet">
+      <string notr="true">margin:0 200px;</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap resource="icon.qrc">:/resources/off.gif</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout_7">
      <item>
       <widget class="QPushButton" name="run_abstract">
@@ -407,6 +504,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="icon.qrc"/>
+ </resources>
  <connections/>
 </ui>

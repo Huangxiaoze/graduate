@@ -7,6 +7,8 @@
 #include <QWidget>
 #include <QString>
 #include <QJsonObject>
+#include <QSlider>
+#include <QDoubleSpinBox>
 
 namespace Ui {
 class Marabou;
@@ -32,11 +34,28 @@ public slots:
     void on_verify_with_ar();
     void on_change_abstract_parameter();
     void on_abstract_finished();
+    void changeInputX0SpinboxValue(int);
+    void changeInputX0SlideValue(double);
+    void changeInputX1SpinboxValue(int);
+    void changeInputX1SlideValue(double);
+    void changeInputX2SpinboxValue(int);
+    void changeInputX2SlideValue(double);
+    void changeInputX3SpinboxValue(int);
+    void changeInputX3SlideValue(double);
+    void changeInputX4SpinboxValue(int);
+    void changeInputX4SlideValue(double);
+    void changeDeltaSpinbox(int);
+    void changeDeltaSlider(double);
+    void on_show_verify_result(QString);
+    void resetResultStatus();
 private:
     QJsonObject getParameter();
     void connect_S_L();
     Ui::Marabou *ui;
     Project *project = nullptr;
+
+    QSlider* sliders[5];
+    QDoubleSpinBox* dsboxs[5];
 };
 
 #endif // MARABOU_H

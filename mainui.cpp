@@ -130,6 +130,7 @@ void MainUI::initUI()
     connect(this->settingView, SIGNAL(SIGNAL_run_abstract(QJsonObject)), this, SLOT(on_run_abstract(QJsonObject)));
     connect(this->settingView, SIGNAL(SIGNAL_verify_by_marabou(QJsonObject)), this, SLOT(on_verify_by_marabou(QJsonObject)));
     connect(this, SIGNAL(SIGNAL_abstract_finished()), this->settingView, SLOT(on_abstract_finished()));
+    connect(this, SIGNAL(SIGNAL_verify_result(QString)), this->settingView, SLOT(on_show_verify_result(QString)));
     // huangxiaoze --- end
     //program out
     connect(this->settingView,SIGNAL(SIGNAL_programout(const QString)),this,SLOT(on_updateProgramOut(const QString)));
@@ -164,11 +165,11 @@ void MainUI::on_run_abstract(QJsonObject parameter) {
         qDebug() << "get abstract success" << endl;
     }
 
-    PyObject *arg = Py_BuildValue("(O, s, i, s)",
+    QString json_content = QJsonDocument(parameter).toJson();
+
+    PyObject *arg = Py_BuildValue("(O, s)",
                                     this->origin_net_,
-                                    parameter.value("abstract_type").toString().toStdString().c_str(),
-                                    parameter.value("abstraction_sequence").toString().toInt(),
-                                    parameter.value("property_id").toString().toStdString().c_str()
+                                    json_content.toStdString().c_str()
                                   );
     PyObject *ret = PyEval_CallObject(abstract, arg);
     PyObject *output = nullptr;
@@ -184,7 +185,7 @@ void MainUI::on_run_abstract(QJsonObject parameter) {
 }
 
 void MainUI::on_verify_by_marabou(QJsonObject parameter) {
-    qDebug() << "MainUI::on_verify_by_marabou()" << endl;
+    qDebug() << "MainUI::on_verify_by_marabou(): " << parameter << endl;
     MarabouVerifyThread *verify_thread = new MarabouVerifyThread(this);
     connect(verify_thread, SIGNAL(SIGNAL_finish_verify(PyObject*, QThread*)), this, SLOT(on_marabou_verify_finished(PyObject*, QThread*)));
     verify_thread->setParameter(this->origin_net_, this->abstract_net_, this->abstract_orig_net_, this->test_property_, parameter);
@@ -209,6 +210,7 @@ void MainUI::on_marabou_verify_finished(PyObject* ret, QThread* verify_thread) {
     if (verify_thread) {
         delete verify_thread;
     }
+    emit SIGNAL_verify_result(res->value("query_result").toString());
 }
 
 

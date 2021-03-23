@@ -10,5 +10,8 @@
     </qresource>
     <qresource prefix="/">
         <file>resources/loading.gif</file>
+	<file>resources/sat.gif</file>
+	<file>resources/unsat.gif</file>
+	<file>resources/off.gif</file>
     </qresource>
 </RCC>

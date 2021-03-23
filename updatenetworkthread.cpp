@@ -4,11 +4,9 @@
 
 UpdateNetworkThread::UpdateNetworkThread(QObject *parent) : QThread(parent)
 {
-    qDebug() << "===> UpdateNetworkThread create.....\n" << endl;
 }
 
 UpdateNetworkThread::~UpdateNetworkThread() {
-    qDebug() << "===> UpdateNetworkThread destroy...\n" << endl;
 }
 
 void UpdateNetworkThread::run()

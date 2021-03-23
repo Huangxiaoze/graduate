@@ -736,7 +736,7 @@ def is_satisfying_assignment(network, test_property, output, variables2nodes) \
             # print("Lower in bounds.keys")
             # print(node_name)
             lower_bound = bounds["Lower"]
-            if lower_bound > output[int(node_name.replace("_inc", "").split("_")[-1])]:
+            if output[int(node_name.replace("_inc", "").split("_")[-1])] < lower_bound:
                 return False
         if "Upper" in bounds.keys():
             upper_bound = bounds["Upper"]

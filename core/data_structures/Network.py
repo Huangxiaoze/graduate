@@ -246,7 +246,6 @@ class Network:
     def get_part2loss_map(self, example:Dict={}) -> Dict:
         part2loss = {}
         nodes2edge_between_map = self.get_nodes2edge_between_map()
-        part2node_map = self.get_part2node_map()
         for layer in self.layers[2:]:
             layer_part2loss_map = \
                 self.get_layer_part2loss_map(self.orig_name2node_map,
@@ -386,4 +385,7 @@ class Network:
             s += "{}: {}\n".format(k, v)
         s += "\n"
         s += "\n\n".join(layer.__str__() for layer in self.layers)
+        print("==> bias", self.biases)
+        print('-'*100)
+        print('==> weight ', self.weights)
         return s

@@ -95,10 +95,8 @@ def one_experiment(
         property_id=consts.PROPERTY_ID, verbose=consts.VERBOSE
 ):
     test_property = get_test_property_acas(property_id)
-    print('---(1)-->', test_property)
     dynamically_import_marabou(query_type=test_property["type"])
-    print('---(2)-->', test_property)
-    from core.nnet.read_nnet import network_from_nnet_file
+    from core.nnet.read_nnet import (network_from_nnet_file, network2rlv)
     from core.abstraction.naive import abstract_network
     from core.abstraction.alg2 import heuristic_abstract_alg2
     from core.abstraction.random_abstract import heuristic_abstract_random
@@ -122,19 +120,13 @@ def one_experiment(
 
     # for i in range(len(test_property["output"])):
     #     test_property["output"][i][1]["Lower"] = lower_bound
+    print(fullname)
     net = network_from_nnet_file(fullname)
-
-    prodeep.verify_without_ar(net, property_id, saveNetWork, "first.txt")
-    print("+"*100)
-    net1 = network_from_nnet_file(fullname)
-    print(net1 == net)
-    prodeep.verify_without_ar(net1, property_id, saveNetWork, "second.txt")
-
-
-    return
+    # print(net)
     print(f"size={len(net.layers)}")
     net, test_property = reduce_property_to_basic_form(network=net, test_property=test_property)
     print('---(3)-->', test_property)
+    network2rlv(net, test_property, "orig_network.rlv")
     # mechanism is vanilla marabou
     if mechanism == "marabou":
         print("query using vanilla Marabou")
@@ -213,6 +205,9 @@ def one_experiment(
                 network=net, test_property=test_property,
                 verbose=consts.VERBOSE
             )
+            print('-'*100)
+            print(vars1)
+            print('-'*100)
             t5 = time.time()
             ar_times.append(t5 - t4)
             ar_sizes.append(net.get_general_net_data()["num_nodes"])

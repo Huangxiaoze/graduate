@@ -25,15 +25,19 @@ def split_back(network:Network, part:AnyStr) -> None:
         debug_print("IndexError in core.test_refinement.step.split_back()")
         import IPython
         IPython.embed()
+
     layer = network.layers[layer_index]
     next_layer = network.layers[layer_index + 1]
     prev_layer = network.layers[layer_index - 1]
+
     part2node_map = network.get_part2node_map()
     union_node = network.name2node_map[part2node_map[part]]
+
     parts = union_node.name.split("+")
     other_parts = [p for p in parts if p != part]
     if not other_parts:
         return
+
     part_node = ARNode(name=part,
                        ar_type=union_node.ar_type,
                        activation_func=union_node.activation_func,
@@ -43,6 +47,7 @@ def split_back(network:Network, part:AnyStr) -> None:
                        )
     bias = sum([network.orig_name2node_map[other_part].bias
                 for other_part in other_parts])
+
     other_parts_node = ARNode(name="+".join(other_parts),
                               ar_type=union_node.ar_type,
                               activation_func=union_node.activation_func,
@@ -50,6 +55,7 @@ def split_back(network:Network, part:AnyStr) -> None:
                               out_edges=[],
                               bias=bias
                               )
+    
     splitting_nodes = [part_node, other_parts_node]
 
     for splitting_node in splitting_nodes:

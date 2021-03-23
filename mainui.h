@@ -20,7 +20,7 @@
 
 #define PYTHON_EXECUTABLE "/home/demo/miniconda3/bin/python"
 #define DEEPG_ROOT "/home/demo/Library/deepg"
-#define PLANET_DIR "/home/demo/Library/planet/casestudies/MNIST"
+#define PLANET_DIR "/home/xiaoze/Desktop/PRODeep_CEGAR/planet/casestudies/MNIST"
 #define Reluplex_ROOT "/home/xiaoze/Desktop/PRODeep_CEGAR/ReluplexCav2017"
 
 #define DEEPG_BACKEND "./build/deepg_constraints"
@@ -91,6 +91,7 @@ private slots:
 signals:
     void SIGNAL_show_network(PyObject*);
     void SIGNAL_abstract_finished();
+    void SIGNAL_verify_result(QString);
 // huangxiaoze --- end
 
 private:

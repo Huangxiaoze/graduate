@@ -1,0 +1,54 @@
+-------------------------------------------
+net_name : ACASXU_run2a_2_8_batch_2000.nnet
+property_id : adversarial_0
+abstraction_time : 6.598222017288208
+query_result : UNSAT
+num_of_refine_steps : 0
+total_ar_query_time : 6.705018758773804
+ar_times : [0.08524203300476074]
+ar_sizes : [74]
+refine_sequence_times : []
+last_net_data : {"layer_sizes": {"0": 5, "1": 50, "2": 4, "3": 4, "4": 4, "5": 4, "6": 2, "7": 1}, "num_nodes": 74, "num_layers": 8, "num_hidden_layers": 6}
+last_query_time : 0.08539891242980957
+-------------------------------------------
+net_name : ACASXU_run2a_2_8_batch_2000.nnet
+property_id : adversarial_0
+abstraction_time : 5.5959649085998535
+query_result : UNSAT
+num_of_refine_steps : 0
+total_ar_query_time : 5.654965162277222
+ar_times : [0.026804208755493164]
+ar_sizes : [74]
+refine_sequence_times : []
+last_net_data : {"layer_sizes": {"0": 5, "1": 50, "2": 4, "3": 4, "4": 4, "5": 4, "6": 2, "7": 1}, "num_nodes": 74, "num_layers": 8, "num_hidden_layers": 6}
+last_query_time : 0.026915550231933594
+-------------------------------------------
+net_name : ACASXU_run2a_2_8_batch_2000.nnet
+property_id : adversarial_0
+abstraction_time : 5.3541035652160645
+query_result : UNSAT
+num_of_refine_steps : 0
+total_ar_query_time : 5.385126352310181
+ar_times : [0.025627613067626953]
+ar_sizes : [74]
+refine_sequence_times : []
+last_net_data : {"layer_sizes": {"0": 5, "1": 50, "2": 4, "3": 4, "4": 4, "5": 4, "6": 2, "7": 1}, "num_nodes": 74, "num_layers": 8, "num_hidden_layers": 6}
+last_query_time : 0.02588033676147461
+-------------------------------------------
+net_name : ACASXU_run2a_2_8_batch_2000.nnet
+property_id : adversarial_0
+query_result : SAT
+orig_query_time : 82.17799711227417
+net_data : {"layer_sizes": {"0": 5, "1": 50, "2": 50, "3": 50, "4": 50, "5": 50, "6": 50, "7": 1}, "num_nodes": 306, "num_layers": 8, "num_hidden_layers": 6}
+-------------------------------------------
+net_name : ACASXU_run2a_2_8_batch_2000.nnet
+property_id : adversarial_0
+abstraction_time : 37.32431435585022
+query_result : UNSAT
+num_of_refine_steps : 0
+total_ar_query_time : 37.758445501327515
+ar_times : [0.3310713768005371]
+ar_sizes : [74]
+refine_sequence_times : []
+last_net_data : {"layer_sizes": {"0": 5, "1": 50, "2": 4, "3": 4, "4": 4, "5": 4, "6": 2, "7": 1}, "num_nodes": 74, "num_layers": 8, "num_hidden_layers": 6}
+last_query_time : 0.3312537670135498

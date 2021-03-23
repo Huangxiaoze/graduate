@@ -224,7 +224,8 @@ int ProjectView::openProject()
 
     dialog.setWindowModality(Qt::ApplicationModal);
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
-    dialog.setDirectory(QDir::home());
+//    dialog.setDirectory(QDir::home());
+    dialog.setDirectory(QDir::currentPath());
     QStringList nameFilters;
     nameFilters << "Project Files(*.pro)";
     dialog.setNameFilters(nameFilters);

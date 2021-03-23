@@ -50,6 +50,7 @@ public slots:
     void on_run_abstract(QJsonObject);
     void on_verify_by_marabou(QJsonObject);
     void on_abstract_finished();
+    void on_show_verify_result(QString);
     // huangxiaoze---end
     void on_importInput();
     void on_Run_DeepG(const QString binpath,const QString configdir);
@@ -74,6 +75,7 @@ signals:
     void SIGNAL_run_abstract(QJsonObject);
     void SIGNAL_verify_by_marabou(QJsonObject);
     void SIGNAL_abstract_finished();
+    void SIGNAL_verify_result(QString);
     // huangxiaoze --- end
     void SIGNAL_run();
     void SIGNAL_run_with_augs(const QString inputfilename,const QString network,const QString robustness,const double delta);

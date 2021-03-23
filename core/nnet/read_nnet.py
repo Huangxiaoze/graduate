@@ -120,7 +120,11 @@ def network_from_nnet_file(nnet_filename: str) -> Network:
         layer = layers[i + 1]
         for j, node in enumerate(layer.nodes):
             node.bias = biases[j]
-
+    for i, layer in enumerate(acasxu_net.weights):
+        print("layer:", i, " ", len(layer))
+    # print(acasxu_net.weights)
+    # print("-"*100)
+    # print(acasxu_net.biases)
     net = Network(layers=layers, weights=acasxu_net.weights, biases=acasxu_net.biases, acasxu_net=acasxu_net)
 
     # for i,biases in enumerate(acasxu_net.biases):
@@ -184,3 +188,36 @@ def save_network_in_json_format(net, filename):
                     })
     with open(filename, 'w', encoding='utf-8') as f:
         f.write(json.dumps(network_json))
+
+
+def network2rlv(network, property_, filename):
+    with open(filename, 'w') as file_object:
+        network_length = len(network.layers)
+        for layer_index in range(network_length):
+            if layer_index == 0:
+                for node in network.layers[layer_index].nodes:
+                    file_object.write("Input {}".format(node.name))
+                    file_object.write("\n")
+            elif layer_index == network_length-1:
+                for node in network.layers[layer_index].nodes:
+                    file_object.write("Linear {} ".format(node.name))
+                    file_object.write("{} ".format(node.bias))
+                    for edge in node.in_edges:
+                        file_object.write("{} {} ".format(edge.weight, edge.src))
+                    file_object.write("\n")
+            else:
+                for node in network.layers[layer_index].nodes:
+                    file_object.write("ReLU {} ".format(node.name))
+                    file_object.write("{} ".format(node.bias))
+                    for edge in node.in_edges:
+                        file_object.write("{} {} ".format(edge.weight, edge.src))
+                    file_object.write("\n")
+        for index, bound in property_["input"]:
+            file_object.write("Assert >= {} 1.0 x_0_{}".format(bound["Upper"],index))
+            file_object.write("\n")
+            file_object.write("Assert <= {} 1.0 x_0_{}".format(bound["Lower"],index))
+            file_object.write("\n")
+        for index, bound in property_["output"]:
+            #file_object.write("Assert <= {} 1.0 x_{}_{}".format(network_length-1, bound["upper"],index))
+            file_object.write("Assert <= {} 1.0 {}".format(bound["Lower"], network.layers[-1].nodes[index].name))
+            file_object.write("\n")

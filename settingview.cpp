@@ -76,6 +76,11 @@ void SettingView::initMarabouView_S_L_Connection() {
     connect(this->marabou, SIGNAL(SIGNAL_run_abstract(QJsonObject)), this, SLOT(on_run_abstract(QJsonObject)));
     connect(this->marabou, SIGNAL(SIGNAL_verify_by_marabou(QJsonObject)), this, SLOT(on_verify_by_marabou(QJsonObject)));
     connect(this, SIGNAL(SIGNAL_abstract_finished()), this->marabou, SLOT(on_abstract_finished()));
+    connect(this, SIGNAL(SIGNAL_verify_result(QString)), this->marabou, SLOT(on_show_verify_result(QString)));
+}
+
+void SettingView::on_show_verify_result(QString res) {
+    emit SIGNAL_verify_result(res);
 }
 
 void SettingView::on_importNetwork(QString file) {
@@ -278,7 +283,6 @@ void SettingView::on_removeTool(QString tool)
 
 void SettingView::openProject(Project * p)
 {
-    qDebug() << "SettingView::openProject" << endl;
     if(p == nullptr)
     {
         qDebug() <<"setting view receive a invalid project";

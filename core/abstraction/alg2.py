@@ -45,7 +45,7 @@ def heuristic_abstract_alg2(
         # the minimal value over all max differences between input edges' weights of couples of nodes of same ar_type.
         union_pairs = []
         for i, layer in enumerate(network.layers[FIRST_ABSTRACT_LAYER:-1]):
-            layer_index = i + 1
+            layer_index = i + FIRST_ABSTRACT_LAYER
             prev_layer = network.layers[layer_index - 1]
             layer_couples = layer.get_couples_of_same_ar_type()
             # calc max difference between input edges' weights of couples
