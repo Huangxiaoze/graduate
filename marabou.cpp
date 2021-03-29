@@ -1,10 +1,14 @@
 #include "marabou.h"
 #include "ui_marabou.h"
+#include "projectview.h"
+#include "choose.h"
 #include <QFileDialog>
 #include <QMessageBox>
 #include <iostream>
 #include <QDebug>
 #include <QJsonObject>
+#include <QJsonDocument>
+#include <QImage>
 
 Marabou::Marabou(Project *project, QWidget *parent) :
     QWidget(parent),
@@ -12,6 +16,18 @@ Marabou::Marabou(Project *project, QWidget *parent) :
 {
     ui->setupUi(this);
     this->project = project;
+
+    QImage image;
+    image.load(":/resources/off.gif");
+    QPixmap pixmap = QPixmap::fromImage(image);
+
+    int width = this->ui->result_label->width();
+    int height = this->ui->result_label->height();
+
+    qDebug() << width << " " << height << endl;
+
+    QPixmap fitpixmap = pixmap.scaled(width, height, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    this->ui->result_label->setPixmap(fitpixmap);
 
     for (int i = 0;i < 5; i++) {
         QHBoxLayout *layout = new QHBoxLayout();
@@ -129,6 +145,48 @@ void Marabou::connect_S_L() {
     connect(this->ui->abstraction_sequence_slider, SIGNAL(valueChanged(int)), this, SLOT(on_change_abstract_parameter()));
     connect(this->ui->abstract_type_combobox, SIGNAL(currentTextChanged(const QString &)), this, SLOT(on_change_abstract_parameter()));
     connect(this->ui->property_combobox, SIGNAL(currentTextChanged(const QString &)), this, SLOT(on_change_abstract_parameter()));
+
+    connect(this->ui->dump_rlv, SIGNAL(clicked()), this, SLOT(on_dump_rlv()));
+    connect(this->ui->planet_with_ar, SIGNAL(clicked()), this, SLOT(on_planet_with_ar()));
+    connect(this->ui->planet_without_ar, SIGNAL(clicked()), this, SLOT(on_planet_without_ar()));
+    connect(this->ui->planet_with_ar, SIGNAL(clicked()), this, SLOT(resetResultStatus()));
+    connect(this->ui->planet_without_ar, SIGNAL(clicked()), this, SLOT(resetResultStatus()));
+}
+
+void Marabou::on_dump_rlv() {
+    QJsonObject parameter = getParameter();
+    QString file = parameter.value("filepath").toString();
+    if (file.isEmpty()) {
+        QMessageBox::warning(this, "Warning", "Please select Network file.");
+        return;
+    }
+
+    QString json_content = QJsonDocument(parameter).toJson();
+
+    Choose* path = new Choose("Choose Project Path", false);
+    if (path->exec() == QDialog::Accepted) {
+        QString filepath = path->getValue();
+        QDir dir(filepath);
+        int result = Util::createFile(dir.absolutePath(), "nnet.rlv");
+        PyObject* func = python.getFunc("core.prodeep.prodeep", "dumpRlv");
+        PyObject* arg = Py_BuildValue("(s, s, s)",
+                                      file.toStdString().c_str(),
+                                      (filepath + "/nnet.rlv").toStdString().c_str(),
+                                      json_content.toStdString().c_str()
+                                      );
+        PyObject *ret = PyEval_CallObject(func, arg);
+
+        char *content = NULL;
+        PyArg_Parse(ret, "s", &content);
+
+        if (strcmp(content, "ok") == 0) {
+            QMessageBox::information(this, "Success", "Success to transfer the network to rlv format.");
+        }
+
+    }
+
+
+
 }
 
 void Marabou::on_import_network() {
@@ -179,6 +237,31 @@ void Marabou::on_verify_with_ar() {
     emit SIGNAL_verify_by_marabou(parameter);
 }
 
+void Marabou::on_planet_with_ar() {
+    QJsonObject parameter = getParameter();
+    QString file = parameter.value("filepath").toString();
+    if (file.isEmpty()) {
+        QMessageBox::warning(this, "Warning", "Please select Network file.");
+        return;
+    }
+    parameter["verify_mode"] = PLANET_WITH_AR;
+    emit SIGNAL_verify_by_marabou(parameter);
+}
+
+void Marabou::on_planet_without_ar() {
+    QJsonObject parameter = getParameter();
+    QString file = parameter.value("filepath").toString();
+    if (file.isEmpty()) {
+        QMessageBox::warning(this, "Warning", "Please select Network file.");
+        return;
+    }
+    parameter["verify_mode"] = PLANET_WITHOUT_AR;
+    emit SIGNAL_verify_by_marabou(parameter);
+}
+
+
+
+
 QJsonObject Marabou::getParameter() {
     QString file = this->ui->network_lineEdit->text();
     QString abstract_type = this->ui->abstract_type_combobox->currentText();
@@ -206,10 +289,12 @@ QJsonObject Marabou::getParameter() {
 
 void Marabou::on_change_abstract_parameter() {
     this->ui->verify_with_ar->setDisabled(true);
+    this->ui->planet_with_ar->setDisabled(true);
 }
 
 void Marabou::on_abstract_finished() {
     this->ui->verify_with_ar->setDisabled(false);
+    this->ui->planet_with_ar->setDisabled(false);
 }
 
 void Marabou::resetResultStatus() {
@@ -218,8 +303,12 @@ void Marabou::resetResultStatus() {
 
 void Marabou::on_show_verify_result(QString res) {
     if (res == "UNSAT") {
-        this->ui->result_label->setPixmap(QPixmap(":/resources/unsat.gif"));
+        QImage img(":/resources/unsat.gif");
+        img.scaled(this->ui->result_label->width(), this->ui->result_label->height(), Qt::KeepAspectRatio);
+        this->ui->result_label->setPixmap(QPixmap(QPixmap::fromImage(img)));
     } else {
-        this->ui->result_label->setPixmap(QPixmap(":/resources/sat.gif"));
+        QImage img(":/resources/sat.gif");
+        img.scaled(this->ui->result_label->width(), this->ui->result_label->height(), Qt::KeepAspectRatio);
+        this->ui->result_label->setPixmap(QPixmap(QPixmap::fromImage(img)));
     }
 }

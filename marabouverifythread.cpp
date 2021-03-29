@@ -28,6 +28,7 @@ void MarabouVerifyThread::run() {
     int verify_mode = parameter_.value("verify_mode").toInt();
     qDebug() << "verify_mode=" << verify_mode << endl;
 
+    parameter_["planet"] = "./planet";
     QString json_content = QString(QJsonDocument(parameter_).toJson());
 
     switch (verify_mode) {
@@ -60,6 +61,17 @@ void MarabouVerifyThread::run() {
                                 parameter_.value("property_id").toString().toStdString().c_str()
                             );
         break;
+    }
+    case PLANET_WITH_AR:
+    {
+        verify_func = python.getFunc("core.prodeep.prodeep", "planet_with_ar");
+        arg = Py_BuildValue("(s)", json_content.toStdString().c_str());
+        break;
+    }
+    case PLANET_WITHOUT_AR:
+    {
+        verify_func = python.getFunc("core.prodeep.prodeep", "planet_without_ar");
+        arg = Py_BuildValue("(s)", json_content.toStdString().c_str());
     }
     default:
         break;

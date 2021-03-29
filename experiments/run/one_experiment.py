@@ -29,7 +29,7 @@ from core.utils.debug_utils import debug_print
 from core.utils.verification_properties_utils import (
     get_test_property_acas, is_satisfying_assignment, TEST_PROPERTY_ACAS
 )
-
+from core.prodeep.prodeep import planet_with_ar, planet_without_ar
 
 def generate_results_filename(
         nnet_filename, property_id, mechanism, refinement_type,
@@ -120,13 +120,13 @@ def one_experiment(
 
     # for i in range(len(test_property["output"])):
     #     test_property["output"][i][1]["Lower"] = lower_bound
-    print(fullname)
+
     net = network_from_nnet_file(fullname)
     # print(net)
     print(f"size={len(net.layers)}")
     net, test_property = reduce_property_to_basic_form(network=net, test_property=test_property)
-    print('---(3)-->', test_property)
-    network2rlv(net, test_property, "orig_network.rlv")
+
+
     # mechanism is vanilla marabou
     if mechanism == "marabou":
         print("query using vanilla Marabou")
@@ -157,10 +157,6 @@ def one_experiment(
         # mechanism is marabou_with_ar
         orig_net = copy.deepcopy(net)
         print("query using Marabou with AR")
-        print("ABSTRACT START......................................")
-        print("use {} abstraction type".format(abstraction_type))
-        saveNetWork(net, "before_abstract.txt")
-        saveNetwork_json(net, "network.before.json")
         t2 = time.time()
         if abstraction_type == "complete":
             net = abstract_network(net)
@@ -185,12 +181,6 @@ def one_experiment(
         else:
             raise NotImplementedError("unknown abstraction")
         abstraction_time = time.time() - t2
-        saveNetWork(net, "after_abstract.txt")
-        saveNetwork_json(net, "nework.after.json")
-        print("ABSTRACT END.......................................")
-        print('---(4)-->', test_property)
-        print("abstraction_time consume: ", abstraction_time)
-        print('\n\n\n')
 
         num_of_refine_steps = 0
         ar_times = []
@@ -205,9 +195,7 @@ def one_experiment(
                 network=net, test_property=test_property,
                 verbose=consts.VERBOSE
             )
-            print('-'*100)
-            print(vars1)
-            print('-'*100)
+
             t5 = time.time()
             ar_times.append(t5 - t4)
             ar_sizes.append(net.get_general_net_data()["num_nodes"])
@@ -307,7 +295,6 @@ def one_experiment(
             ("last_net_data", json.dumps(net.get_general_net_data())),
             ("last_query_time", last_net_ar_time)
         ]
-        saveResultToFile(results_directory, results_filename, res);
         return res
 
 
@@ -369,6 +356,7 @@ def parse_args():
 
 
 if __name__ == '__main__':
+
     args = parse_args()
     print('*'*80)
     print("==>one_experiment.py command args: ", args)
@@ -386,7 +374,6 @@ if __name__ == '__main__':
         abstraction_sequence=args.abstraction_sequence,
         results_directory=args.results_directory)
     output = ''
-    pass
     print("------------------------------------------------Output------------------------------------------------")
     for res in one_exp_res:
         print(res)

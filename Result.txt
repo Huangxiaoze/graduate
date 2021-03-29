@@ -52,3 +52,51 @@ ar_sizes : [74]
 refine_sequence_times : []
 last_net_data : {"layer_sizes": {"0": 5, "1": 50, "2": 4, "3": 4, "4": 4, "5": 4, "6": 2, "7": 1}, "num_nodes": 74, "num_layers": 8, "num_hidden_layers": 6}
 last_query_time : 0.3312537670135498
+-------------------------------------------
+net_name : ACASXU_run2a_2_8_batch_2000.nnet
+property_id : adversarial_0
+abstraction_time : 5.880489110946655
+query_result : UNSAT
+num_of_refine_steps : 0
+total_ar_query_time : 5.976070880889893
+ar_times : [0.08958697319030762]
+ar_sizes : [74]
+refine_sequence_times : []
+last_net_data : {"layer_sizes": {"0": 5, "1": 50, "2": 4, "3": 4, "4": 4, "5": 4, "6": 2, "7": 1}, "num_nodes": 74, "num_layers": 8, "num_hidden_layers": 6}
+last_query_time : 0.08975362777709961
+-------------------------------------------
+net_name : ACASXU_run2a_2_8_batch_2000.nnet
+property_id : adversarial_0
+abstraction_time : 5.697716236114502
+query_result : UNSAT
+num_of_refine_steps : 0
+total_ar_query_time : 5.728667974472046
+ar_times : [0.02548694610595703]
+ar_sizes : [74]
+refine_sequence_times : []
+last_net_data : {"layer_sizes": {"0": 5, "1": 50, "2": 4, "3": 4, "4": 4, "5": 4, "6": 2, "7": 1}, "num_nodes": 74, "num_layers": 8, "num_hidden_layers": 6}
+last_query_time : 0.025632381439208984
+-------------------------------------------
+net_name : ACASXU_run2a_2_8_batch_2000.nnet
+property_id : adversarial_0
+abstraction_time : 6.247859001159668
+query_result : UNSAT
+num_of_refine_steps : 0
+total_ar_query_time : 6.29745078086853
+ar_times : [0.04922986030578613]
+ar_sizes : [74]
+refine_sequence_times : []
+last_net_data : {"layer_sizes": {"0": 5, "1": 50, "2": 4, "3": 4, "4": 4, "5": 4, "6": 2, "7": 1}, "num_nodes": 74, "num_layers": 8, "num_hidden_layers": 6}
+last_query_time : 0.04958987236022949
+-------------------------------------------
+net_name : ACASXU_run2a_2_8_batch_2000.nnet
+property_id : adversarial_0
+abstraction_time : 5.98819375038147
+query_result : UNSAT
+num_of_refine_steps : 0
+total_ar_query_time : 6.016179800033569
+ar_times : [0.027735233306884766]
+ar_sizes : [74]
+refine_sequence_times : []
+last_net_data : {"layer_sizes": {"0": 5, "1": 50, "2": 4, "3": 4, "4": 4, "5": 4, "6": 2, "7": 1}, "num_nodes": 74, "num_layers": 8, "num_hidden_layers": 6}
+last_query_time : 0.0279843807220459

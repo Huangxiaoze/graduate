@@ -32,6 +32,8 @@ public slots:
     void on_rs_slider_valudeChange(int);
     void on_verify_without_ar();
     void on_verify_with_ar();
+    void on_planet_with_ar();
+    void on_planet_without_ar();
     void on_change_abstract_parameter();
     void on_abstract_finished();
     void changeInputX0SpinboxValue(int);
@@ -48,6 +50,7 @@ public slots:
     void changeDeltaSlider(double);
     void on_show_verify_result(QString);
     void resetResultStatus();
+    void on_dump_rlv();
 private:
     QJsonObject getParameter();
     void connect_S_L();

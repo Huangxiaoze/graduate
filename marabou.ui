@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>567</width>
-    <height>639</height>
+    <width>605</width>
+    <height>594</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -22,7 +22,7 @@
   <property name="styleSheet">
    <string notr="true">display:flex;align-items:center;justify-contents:center;flex-direction:column;</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_6">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
@@ -39,6 +39,13 @@
       <widget class="QPushButton" name="importNetwork">
        <property name="text">
         <string>import</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="dump_rlv">
+       <property name="text">
+        <string>dump_rlv</string>
        </property>
       </widget>
      </item>
@@ -129,376 +136,449 @@
     </layout>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox_2">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="title">
-      <string>Abstract</string>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>Abstraction Type:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="abstract_type_combobox">
-          <item>
-           <property name="text">
-            <string>complete</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>heuristic_alg2</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>heuristic_random</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_5">
-        <item>
-         <widget class="QLabel" name="label_5">
-          <property name="text">
-           <string>property :</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="property_combobox">
-          <property name="currentIndex">
-           <number>9</number>
-          </property>
-          <item>
-           <property name="text">
-            <string>property_1</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>property_2</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>property_3</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>property_4</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>sanity_UNSAT</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>sanity_SAT</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>basic_0</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>basic_1</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>basic_2</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>adversarial_0</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>adversarial_1</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>adversarial_2</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>adversarial_3</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>adversarial_4</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>adversarial_5</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>adversarial_6</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>adversarial_7</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>adversarial_8</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>adversarial_9</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>adversarial_10</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>adversarial_11</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>adversarial_12</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>adversarial_13</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>adversarial_14</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>adversarial_15</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>adversarial_16</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>adversarial_17</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>adversarial_18</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>adversarial_19</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>basic_medium</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>basic_long-medium</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>basic_long</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>basic_default</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_6">
-        <item>
-         <widget class="QLabel" name="label_6">
-          <property name="text">
-           <string>abstraction_sequence :</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="abstraction_sequence_slider">
-          <property name="minimum">
-           <number>100</number>
-          </property>
-          <property name="maximum">
-           <number>250</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="as_value">
-          <property name="text">
-           <string>100</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
-      <string>Refine</string>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_9">
-        <item>
-         <widget class="QLabel" name="label_7">
-          <property name="text">
-           <string>Refinement Type:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="refinement_type_combobox">
-          <item>
-           <property name="text">
-            <string>cegar</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>weight_based</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_13">
-        <item>
-         <widget class="QLabel" name="label_8">
-          <property name="text">
-           <string>refinement_sequence: </string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="refinement_sequence_slider">
-          <property name="minimum">
-           <number>50</number>
-          </property>
-          <property name="maximum">
-           <number>100</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="rs_value">
-          <property name="text">
-           <string>50</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="result_label">
-     <property name="styleSheet">
-      <string notr="true">margin:0 200px;</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="pixmap">
-      <pixmap resource="icon.qrc">:/resources/off.gif</pixmap>
-     </property>
-     <property name="scaledContents">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_7">
+    <layout class="QHBoxLayout" name="horizontalLayout_11">
      <item>
-      <widget class="QPushButton" name="run_abstract">
+      <widget class="QGroupBox" name="groupBox_2">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="title">
+        <string>Abstract</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Abstraction Type:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="abstract_type_combobox">
+            <item>
+             <property name="text">
+              <string>complete</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>heuristic_alg2</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>heuristic_random</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>property :</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="property_combobox">
+            <property name="currentIndex">
+             <number>9</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>property_1</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>property_2</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>property_3</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>property_4</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>sanity_UNSAT</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>sanity_SAT</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>basic_0</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>basic_1</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>basic_2</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>adversarial_0</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>adversarial_1</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>adversarial_2</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>adversarial_3</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>adversarial_4</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>adversarial_5</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>adversarial_6</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>adversarial_7</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>adversarial_8</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>adversarial_9</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>adversarial_10</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>adversarial_11</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>adversarial_12</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>adversarial_13</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>adversarial_14</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>adversarial_15</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>adversarial_16</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>adversarial_17</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>adversarial_18</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>adversarial_19</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>basic_medium</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>basic_long-medium</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>basic_long</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>basic_default</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <item>
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>abstraction_sequence :</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="abstraction_sequence_slider">
+            <property name="minimum">
+             <number>100</number>
+            </property>
+            <property name="maximum">
+             <number>250</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="as_value">
+            <property name="text">
+             <string>100</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBox">
+       <property name="title">
+        <string>Refine</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_9">
+          <item>
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>Refinement Type:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="refinement_type_combobox">
+            <item>
+             <property name="text">
+              <string>cegar</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>weight_based</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_13">
+          <item>
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>refinement_sequence: </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="refinement_sequence_slider">
+            <property name="minimum">
+             <number>50</number>
+            </property>
+            <property name="maximum">
+             <number>100</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="rs_value">
+            <property name="text">
+             <string>50</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_10">
+     <item>
+      <widget class="QLabel" name="result_label">
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>180</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>100</width>
+         <height>180</height>
+        </size>
+       </property>
        <property name="styleSheet">
-        <string notr="true"/>
+        <string notr="true">border:1px solid black;</string>
        </property>
        <property name="text">
-        <string>Run Abstract</string>
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap resource="icon.qrc">:/resources/off.gif</pixmap>
+       </property>
+       <property name="scaledContents">
+        <bool>true</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="wordWrap">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="verify_with_ar">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="text">
-        <string>Verify_with_AR</string>
-       </property>
-       <property name="default">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="verify_without_ar">
-       <property name="text">
-        <string>Verify_without_AR</string>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout_8">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QGroupBox" name="groupBox_3">
+           <property name="title">
+            <string>Marabou</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_7">
+              <item>
+               <widget class="QPushButton" name="run_abstract">
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>Run Abstract</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="verify_with_ar">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>marabou_with_AR</string>
+                </property>
+                <property name="default">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="verify_without_ar">
+                <property name="text">
+                 <string>marabou_without_AR</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBox_4">
+           <property name="title">
+            <string>Planet</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_5">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <item>
+               <widget class="QPushButton" name="planet_with_ar">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string>planet_with_AR</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="planet_without_ar">
+                <property name="text">
+                 <string>planet_without_AR</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>

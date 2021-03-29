@@ -25,6 +25,9 @@ int main(int argc, char *argv[])
     python.importFunc("core.prodeep.prodeep", "abstract");
     python.importFunc("core.prodeep.prodeep", "verify_without_ar");
     python.importFunc("core.prodeep.prodeep", "verify_with_ar");
+    python.importFunc("core.prodeep.prodeep", "dumpRlv");
+    python.importFunc("core.prodeep.prodeep", "planet_without_ar");
+    python.importFunc("core.prodeep.prodeep", "planet_with_ar");
     qDebug() << "=========Finish init Python environment=========" << endl;
 
     QDir tmpPath = QDir::tempPath();

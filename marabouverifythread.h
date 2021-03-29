@@ -8,6 +8,8 @@
 
 #define VERIFY_WITH_AR 1
 #define VERIFY_WITHOUT_AR 0
+#define PLANET_WITH_AR 2
+#define PLANET_WITHOUT_AR 3
 
 class MarabouVerifyThread : public QThread
 {

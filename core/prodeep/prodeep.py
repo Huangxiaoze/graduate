@@ -6,6 +6,8 @@ import copy
 import time
 import argparse
 import pandas as pd
+import shlex
+import subprocess
 
 # internal imports
 from import_marabou import dynamically_import_marabou
@@ -251,3 +253,175 @@ def verify_with_ar(abstract_net, orig_net, test_property, refinement_type, abstr
     except Exception as e:
         print("exception occur", e)
 
+
+
+def dumpRlv(full_path, save_path, json_content):
+    print(full_path, save_path, json_content)
+    parameter = json.loads(json_content)
+
+    net = network_from_nnet_file(full_path)
+    test_property = generate_test_property(parameter)
+
+    net, test_property = reduce_property_to_basic_form(network = net, test_property = test_property)
+
+    network2rlv(net, test_property, save_path)
+    return 'ok'
+
+
+
+def planet_without_ar(json_content):
+    parameter = json.loads(json_content)
+
+    test_property = generate_test_property(parameter)
+
+    filepath = parameter['filepath']
+
+    net = network_from_nnet_file(filepath)
+    net, test_property = reduce_property_to_basic_form(network = net, test_property = test_property)
+
+    network2rlv(net, test_property, "origin_net.rlv")
+    shell_cmd = "{} origin_net.rlv".format(parameter['planet'])
+    cmd = shlex.split(shell_cmd)
+
+    t1 = time.time()
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = p.communicate()
+    t2 = time.time()
+
+    res = out.decode(encoding='utf-8').strip().split('\n')
+
+    return json.dumps({
+            "query_result" : res[0],
+            "time_consume" : str(t2 - t1)
+        })
+
+def planet_with_ar(json_content):
+    print(json_content)
+    parameter = json.loads(json_content)
+    refinement_type = parameter['refinement_type']
+    abstraction_type = parameter['abstract_type']
+    refinement_sequence = int(parameter['refinement_sequence'])
+    abstraction_sequence = int(parameter['abstraction_sequence'])
+
+
+    test_property = generate_test_property(parameter)
+
+    net = network_from_nnet_file(parameter['filepath'])
+    net, test_property = reduce_property_to_basic_form(network=net, test_property=test_property)
+
+    orig_net = copy.deepcopy(net)
+
+    # Abstract
+    t2 = time.time()
+    if abstraction_type == "complete":
+        net = abstract_network(net)
+    elif abstraction_type == "heuristic_alg2":
+        net = heuristic_abstract_alg2(
+            network=net,
+            test_property=test_property,
+            sequence_length=abstraction_sequence
+        )
+    elif abstraction_type == "heuristic_random":
+        net = heuristic_abstract_random(
+            network=net,
+            test_property=test_property,
+            sequence_length=abstraction_sequence
+        )
+    # elif abstraction_type == "heuristic_clustering":
+    #     net = heuristic_abstract_clustering(
+    #         network=net,
+    #         test_property=test_property,
+    #         sequence_length=abstraction_sequence
+    #     )
+    else:
+        raise NotImplementedError("unknown abstraction")
+    abstraction_time = time.time() - t2
+    
+    network2rlv(net, test_property, "network.rlv")
+
+    shell_cmd = "{} network.rlv".format(parameter['planet'])
+    cmd = shlex.split(shell_cmd)
+
+    print("here")
+
+    num_of_refine_steps = 0
+    ar_times = []
+    ar_sizes = []
+    refine_sequence_times = []
+    spurious_examples = []
+
+    while True:
+        t4 = time.time()
+        print(net.get_general_net_data())
+
+        p = subprocess.Popen(cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        out, err = p.communicate()
+
+        res = out.decode(encoding='utf-8').strip().split('\n')
+
+        query_result = res[0]
+
+        if 'UNSAT' == query_result:
+            break
+        if 'SAT' == query_result:
+
+            # counterexample
+            vars1 = {}
+            for i in range(5):
+                content = res[3 + i].split('/')[-1].strip()
+                vars1[i] = float(content)
+
+            orig_net_output = orig_net.speedy_evaluate(vars1)
+            
+            nodes2variables, variables2nodes = orig_net.get_variables()
+            # we got y'>3.99, check if also y'>3.99 for the same input
+            if is_satisfying_assignment(network=orig_net,
+                                        test_property=test_property,
+                                        output=orig_net_output,
+                                        variables2nodes=variables2nodes):
+                print("property holds also in orig - SAT (finish)")
+                break  # also counter example for orig_net            
+            else:
+                print("need to refine")
+                spurious_examples.append(vars1)
+                num_of_refine_steps += 1
+                t_cur_refine_start = time.time()
+                refinement_sequences_counter = 0
+                while True:
+                    refinement_sequences_counter += 1
+                    if refinement_type == "cegar":
+                        debug_print("cegar")
+                        net = refine(network=net,
+                                     sequence_length=refinement_sequence,
+                                     example=vars1)
+                    else:
+                        debug_print("weight_based")
+                        net = refine(network=net,
+                                         sequence_length=refinement_sequence)   
+
+                    # update network file                 
+                    network2rlv(net, test_property, "network.rlv")
+                    
+                    net_output = net.speedy_evaluate(vars1)
+
+                    nodes2variables, variables2nodes = net.get_variables()
+                    if not is_satisfying_assignment(network=orig_net,
+                                        test_property=test_property,
+                                        output=orig_net_output,
+                                        variables2nodes=variables2nodes):
+                        break
+                t_cur_refine_end = time.time()
+                refine_sequence_times.append(t_cur_refine_end - t_cur_refine_start)
+
+    t3 = time.time()
+    total_ar_time = t3 - t2
+    last_net_ar_time = t3 - t4
+    res = {
+        "query_result" : query_result,
+        "num_of_refine_steps" : str(num_of_refine_steps),
+        "ar_times" : str(ar_times),
+        "ar_sizes" : str(ar_sizes),
+        "refine_sequence_times" : str(refine_sequence_times),
+    }
+    return json.dumps(res)
