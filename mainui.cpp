@@ -13,7 +13,7 @@
 #include <QLabel>
 #include "util.h"
 #include "init_python.h"
-#include "marabouverifythread.h"
+#include "verifythread.h"
 
 MainUI::MainUI(QWidget *parent) :
     QMainWindow(parent),
@@ -186,7 +186,7 @@ void MainUI::on_run_abstract(QJsonObject parameter) {
 
 void MainUI::on_verify_by_marabou(QJsonObject parameter) {
     qDebug() << "MainUI::on_verify_by_marabou(): " << parameter << endl;
-    MarabouVerifyThread *verify_thread = new MarabouVerifyThread(this);
+    VerifyThread *verify_thread = new VerifyThread(this);
     connect(verify_thread, SIGNAL(SIGNAL_finish_verify(PyObject*, QThread*)), this, SLOT(on_marabou_verify_finished(PyObject*, QThread*)));
     verify_thread->setParameter(this->origin_net_, this->abstract_net_, this->abstract_orig_net_, this->test_property_, parameter);
     verify_thread->start();

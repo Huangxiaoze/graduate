@@ -2,7 +2,7 @@
 #define MARABOU_H
 
 #include "project.h"
-#include "marabouverifythread.h"
+#include "verifythread.h"
 
 #include <QWidget>
 #include <QString>

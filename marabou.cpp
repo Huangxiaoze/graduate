@@ -144,7 +144,6 @@ void Marabou::connect_S_L() {
     // ensure abstract has finished when change the abstract parameter
     connect(this->ui->abstraction_sequence_slider, SIGNAL(valueChanged(int)), this, SLOT(on_change_abstract_parameter()));
     connect(this->ui->abstract_type_combobox, SIGNAL(currentTextChanged(const QString &)), this, SLOT(on_change_abstract_parameter()));
-    connect(this->ui->property_combobox, SIGNAL(currentTextChanged(const QString &)), this, SLOT(on_change_abstract_parameter()));
 
     connect(this->ui->dump_rlv, SIGNAL(clicked()), this, SLOT(on_dump_rlv()));
     connect(this->ui->planet_with_ar, SIGNAL(clicked()), this, SLOT(on_planet_with_ar()));
@@ -268,13 +267,11 @@ QJsonObject Marabou::getParameter() {
     QString refinement_type = this->ui->refinement_type_combobox->currentText();
     QString as = QString("%1").arg(this->ui->abstraction_sequence_slider->value());
     QString rs = this->ui->rs_value->text();
-    QString property = this->ui->property_combobox->currentText();
     QJsonObject parameter;
     parameter["filepath"] = file;
     parameter["abstract_type"] = abstract_type;
     parameter["abstraction_sequence"] = as;
     parameter["refinement_sequence"] = rs;
-    parameter["property_id"] = property;
     parameter["refinement_type"] = refinement_type;
 
     for (int i = 0; i < 5; i++) {

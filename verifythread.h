@@ -11,12 +11,12 @@
 #define PLANET_WITH_AR 2
 #define PLANET_WITHOUT_AR 3
 
-class MarabouVerifyThread : public QThread
+class VerifyThread : public QThread
 {
     Q_OBJECT
 public:
-    explicit MarabouVerifyThread(QObject *parent = nullptr);
-    ~MarabouVerifyThread();
+    explicit VerifyThread(QObject *parent = nullptr);
+    ~VerifyThread();
     void setParameter(PyObject*, PyObject*, PyObject*, PyObject*, QJsonObject);
 
 signals:

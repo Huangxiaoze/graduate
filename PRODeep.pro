@@ -32,7 +32,6 @@ SOURCES += \
     main.cpp \
     mainui.cpp \
     marabou.cpp \
-    marabouverifythread.cpp \
     matrix.cpp \
     network.cpp \
     networkfile.cpp \
@@ -52,7 +51,8 @@ SOURCES += \
     textedit.cpp \
     treenode.cpp \
     updatenetworkthread.cpp \
-    util.cpp
+    util.cpp \
+    verifythread.cpp
 
 HEADERS += \
     backend.h \
@@ -69,7 +69,6 @@ HEADERS += \
     loadingwidget.h \
     mainui.h \
     marabou.h \
-    marabouverifythread.h \
     matrix.h \
     network.h \
     networkfile.h \
@@ -89,7 +88,8 @@ HEADERS += \
     textedit.h \
     treenode.h \
     updatenetworkthread.h \
-    util.h
+    util.h \
+    verifythread.h
 
 FORMS += \
     choose.ui \

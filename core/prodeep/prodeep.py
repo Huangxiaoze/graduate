@@ -133,8 +133,7 @@ def abstract(net, json_content, verbose=consts.VERBOSE):
     return (net, orig_net, test_property, json.dumps(output))
 
 def verify_with_ar(abstract_net, orig_net, test_property, refinement_type, abstraction_type, refinement_sequence,
-                      abstraction_sequence, property_id=consts.PROPERTY_ID,
-                      verbose=consts.VERBOSE
+                      abstraction_sequence, verbose=consts.VERBOSE
     ):
     try:
         # mechanism is marabou_with_ar
@@ -162,10 +161,6 @@ def verify_with_ar(abstract_net, orig_net, test_property, refinement_type, abstr
             ar_sizes.append(net.get_general_net_data()["num_nodes"])
             # if verbose:
             print("query time after A and {} R steps is {}".format(num_of_refine_steps, t5-t4))
-            debug_print(net.get_general_net_data())
-            print('+'*100)
-            print(query_result)
-            print("+"*100)
             if query_result == "UNSAT":
                 # if always y'<3.99 then also always y<3.99
                 if verbose:
@@ -174,16 +169,7 @@ def verify_with_ar(abstract_net, orig_net, test_property, refinement_type, abstr
             if query_result == "SAT":
                 if verbose:
                     print("SAT (have to check example on original net)")
-                    print(vars1)
-                # debug_print(f'vars1={vars1}')
-                # st = time.time()
-                # orig_net_output = orig_net.evaluate(vars1)
-                # print("evaluate: {}".format(time.time() - st))
-                # st = time.time()
                 orig_net_output = orig_net.speedy_evaluate(vars1)
-                # print(f"orig_net_output={orig_net_output}")
-                # print(f"orig_net.name2node_map={orig_net.name2node_map}")
-                # print("speedy evaluate: {}".format(time.time() - st))
                 nodes2variables, variables2nodes = orig_net.get_variables()
                 # we got y'>3.99, check if also y'>3.99 for the same input
                 if is_satisfying_assignment(network=orig_net,
@@ -241,7 +227,6 @@ def verify_with_ar(abstract_net, orig_net, test_property, refinement_type, abstr
             print("last ar net query time = {}".format(last_net_ar_time))
 
         res = {
-            "property_id" : property_id,
             "query_result" : query_result,
             "num_of_refine_steps" : str(num_of_refine_steps),
             "ar_times" : str(ar_times),

@@ -1,18 +1,18 @@
-#include "marabouverifythread.h"
+#include "verifythread.h"
 #include <QDebug>
 #include <QMessageBox>
 #include <iostream>
 #include <QJsonDocument>
-MarabouVerifyThread::MarabouVerifyThread(QObject *parent) : QThread(parent)
+VerifyThread::VerifyThread(QObject *parent) : QThread(parent)
 {
 
 }
 
-MarabouVerifyThread::~MarabouVerifyThread() {
+VerifyThread::~VerifyThread() {
     qDebug() << "MaraboutVerifyThread::MarabouVerifyThread(): destroy marabou verify thread..." << endl;
 }
 
-void MarabouVerifyThread::setParameter(PyObject* origin_net, PyObject* abstract_net, PyObject* abstract_orig_net, PyObject* test_property, QJsonObject parameter) {
+void VerifyThread::setParameter(PyObject* origin_net, PyObject* abstract_net, PyObject* abstract_orig_net, PyObject* test_property, QJsonObject parameter) {
     this->origin_net_ = origin_net;
     this->abstract_net_ = abstract_net;
     this->abstract_orig_net_ = abstract_orig_net;
@@ -20,7 +20,7 @@ void MarabouVerifyThread::setParameter(PyObject* origin_net, PyObject* abstract_
     this->parameter_ = parameter;
 }
 
-void MarabouVerifyThread::run() {
+void VerifyThread::run() {
     qDebug() << "thread start run..." << endl;
     qDebug() << parameter_ << endl;
     PyObject *verify_func = nullptr;
@@ -50,15 +50,14 @@ void MarabouVerifyThread::run() {
             return;
         }
         verify_func = python.getFunc("core.prodeep.prodeep", "verify_with_ar");
-        arg = Py_BuildValue("(O, O, O, s, s, i, i, s)",
+        arg = Py_BuildValue("(O, O, O, s, s, i, i)",
                                 this->abstract_net_,
                                 this->abstract_orig_net_,
                                 this->test_property_,
                                 parameter_.value("refinement_type").toString().toStdString().c_str(),
                                 parameter_.value("abstract_type").toString().toStdString().c_str(),
                                 parameter_.value("refinement_sequence").toString().toInt(),
-                                parameter_.value("abstraction_sequence").toString().toInt(),
-                                parameter_.value("property_id").toString().toStdString().c_str()
+                                parameter_.value("abstraction_sequence").toString().toInt()
                             );
         break;
     }
