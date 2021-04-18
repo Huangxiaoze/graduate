@@ -1,0 +1,15 @@
+{
+	"file" : "2_8",
+	"abstract_type" : "complete", 
+	"abstraction_sequence" : "100",
+	"refinement_sequence" : "50",
+	"refinement_type" : "cegar",
+	"inputX0" : 0,
+	"inputX1" : 0,
+	"inputX2" : 0,
+	"inputX3" : 0,
+	"inputX4" : 0,
+	"output_label" : "label_0",
+	"delta" : 0.01,
+	"planet" : "./planet"
+}
