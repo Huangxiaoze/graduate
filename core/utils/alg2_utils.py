@@ -6,6 +6,7 @@ from typing import List, Dict
 from core.utils.assertions_utils import is_evaluation_result_equal
 from core.utils.verification_properties_utils import is_satisfying_assignment
 
+# 在输入的上下界范围内随机生成一组数据
 def get_limited_random_input(input_size, test_property) -> Dict[int, float]:
     """
     :param input_size: network's input layer's size: len(network.layers[0].nodes)

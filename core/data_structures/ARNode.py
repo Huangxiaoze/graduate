@@ -82,7 +82,7 @@ class ARNode:
         :return: Bool is node a pos/neg node?
         """
         if self.out_edges:
-            is_positive = any([e.weight < 0 for e in self.out_edges])
+            is_positive = any([e.weight < 0 for e in self.out_edges]) # any: if return true when the list element has one True element
         else:
             is_positive = True
         return "pos" if is_positive else "neg"

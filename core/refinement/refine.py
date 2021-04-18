@@ -26,8 +26,8 @@ def refine(network:Network, sequence_length:int=1, visualize:bool=False, **kws):
     for part in r_sequence:
         split_back(network, part)
         # debug_print("after split_back({})".format(part))
-        if visualize:
-            network.visualize(title="after refine {}".format(part))
+        # if visualize:
+        #     network.visualize(title="after refine {}".format(part))
     network.biases = network.generate_biases()
     network.weights = network.generate_weights()
     return network

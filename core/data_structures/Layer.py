@@ -205,6 +205,7 @@ class Layer:
                     dest_part2dest[dest_part] = dest
 
             # get a dictionary {dest: min/max weight from specific part to it}
+            # 源节点与目的节点（节点集合）中的多个节点都有边时，根据节点的属性，选择其中的一条边（最大权值或者最小权值）作为代表
             for part in node_parts:
                 for edge in name2node_map[part].out_edges:
                     dest = dest_part2dest[edge.dest]
@@ -214,6 +215,7 @@ class Layer:
                     dest2part_weights[dest][part] = max_min_func(cur_weight,
                                                                  edge.weight)
             # choose the minimal/maximal weight as the weight from node to dest
+            # 源节点经过抽象后也是一个节点集合，目的节点也是一个节点集合，他们之间的边权值由源节点和目的节点各个组成部分的和来表示
             dest_weights = {}
             for dest, part_weights in dest2part_weights.items():
                 if dest not in current_dest_names:

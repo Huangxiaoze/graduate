@@ -184,7 +184,7 @@
           <item>
            <widget class="QLabel" name="label_6">
             <property name="text">
-             <string>abstraction_sequence :</string>
+             <string>abstraction sequence :</string>
             </property>
            </widget>
           </item>
@@ -249,7 +249,7 @@
           <item>
            <widget class="QLabel" name="label_8">
             <property name="text">
-             <string>refinement_sequence: </string>
+             <string>refinement sequence: </string>
             </property>
            </widget>
           </item>
@@ -344,7 +344,7 @@
                  <bool>false</bool>
                 </property>
                 <property name="text">
-                 <string>marabou_with_AR</string>
+                 <string>marabou with AR</string>
                 </property>
                 <property name="default">
                  <bool>false</bool>
@@ -354,7 +354,7 @@
               <item>
                <widget class="QPushButton" name="verify_without_ar">
                 <property name="text">
-                 <string>marabou_without_AR</string>
+                 <string>marabou without AR</string>
                 </property>
                </widget>
               </item>
@@ -377,14 +377,14 @@
                  <bool>true</bool>
                 </property>
                 <property name="text">
-                 <string>planet_with_AR</string>
+                 <string>planet with AR</string>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QPushButton" name="planet_without_ar">
                 <property name="text">
-                 <string>planet_without_AR</string>
+                 <string>planet without AR</string>
                 </property>
                </widget>
               </item>

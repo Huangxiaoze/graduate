@@ -1,1 +1,1 @@
-caffeprototxt_AI2_MNIST_FNN_1_testNetworkB.rlv;2.in;TOOL:Basic$Geometry$Reluplex$Marabou$;
+caffeprototxt_AI2_MNIST_FNN_1_testNetworkB.rlv;2.in;TOOL:Basic$Geometry$Reluplex$Abstract And Refine$;

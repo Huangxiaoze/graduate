@@ -33,23 +33,23 @@ def finish_abstraction(network, next_layer_part2union:Dict,
     fix_prev_layer_out_edges_dests(network=network,
                                    prev_layer_index=FIRST_ABSTRACT_LAYER - 1,
                                    updated_names=next_layer_part2union)
-    if verbose:
-        debug_print("net after fix_prev_layer_out_edges_dests")
-        print(network)
+    # if verbose:
+    #     debug_print("net after fix_prev_layer_out_edges_dests")
+    #     print(network)
     fix_prev_layer_min_max_edges(network=network,
                                  prev_layer_index=FIRST_ABSTRACT_LAYER - 1)
-    if verbose:
-        debug_print("net after fix_prev_layer_min_max_edges")
-        print(network)
+    # if verbose:
+    #     debug_print("net after fix_prev_layer_min_max_edges")
+    #     print(network)
     fix_cur_layer_in_edges(network=network,
                            layer_index=FIRST_ABSTRACT_LAYER)
     network.biases = network.generate_biases()
     network.weights = network.generate_weights()
-    if verbose:
-        debug_print("net after fix_cur_layer_in_edges")
-        print(network)
-    if verbose:
-        debug_print("finish_abstraction finished")
+    # if verbose:
+    #     debug_print("net after fix_cur_layer_in_edges")
+    #     print(network)
+    # if verbose:
+    #     debug_print("finish_abstraction finished")
 
 
 def fix_prev_layer_out_edges_dests(network, prev_layer_index:int,
@@ -92,7 +92,9 @@ def fix_prev_layer_min_max_edges(network, prev_layer_index:int) -> None:
                 dest_node.new_in_edges.append(new_edge)
             except AttributeError:
                 dest_node.new_in_edges = [new_edge]
+
             node = network.name2node_map[a_node]
+            
             try:
                 node.new_out_edges.append(new_edge)
             except AttributeError:

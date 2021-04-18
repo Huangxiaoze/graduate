@@ -246,10 +246,11 @@ void GraphWidget::wheelEvent(QWheelEvent *event)
 //! [7]
 void GraphWidget::scaleView(qreal scaleFactor)
 {
-    qreal factor = transform().scale(scaleFactor, scaleFactor).mapRect(QRectF(0, 0, 1, 1)).width();
-    if (factor < 0.07 || factor > 100)
-        return;
 
+    qreal factor = transform().scale(scaleFactor, scaleFactor).mapRect(QRectF(0, 0, 1, 1)).width();
+    qDebug() << "scaleFactor: " << scaleFactor << " factor: " << factor << endl;
+    if (factor > 100)
+        return;
     scale(scaleFactor, scaleFactor);
 }
 //! [7]

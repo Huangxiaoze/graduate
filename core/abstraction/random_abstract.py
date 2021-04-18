@@ -9,6 +9,7 @@ from core.utils.abstraction_utils import finish_abstraction
 from core.configuration.consts import VERBOSE, FIRST_ABSTRACT_LAYER
 
 
+# 随机选择几个神经元进行抽象
 def heuristic_abstract_random(
         network: Network,
         test_property:dict,

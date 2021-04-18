@@ -163,8 +163,7 @@ void SettingView::addTool(QString tool,Project * project)
      if(!this->network->isLoaded()) return;
      this->network->clearCount();
      this->network->clearBoundOfNode();
-     if(obj.contains("layers"))
-     {
+     if (obj.contains("layers")) {
          QJsonArray layers = obj.value("layers").toArray();
          int size = layers.size();
          for(int i=0;i<size;i++){

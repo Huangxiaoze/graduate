@@ -254,6 +254,32 @@ class Network:
             part2loss.update(layer_part2loss_map)
         return part2loss
 
+    def get_layer_part2loss_map(self,
+                                orig_name2node_map:Dict,
+                                nodes2edge_between_map:Dict,
+                                example:Dict={}) -> Dict:
+        part2loss = {}
+        part2node = self.get_part2node_map()
+        nodes2variables, variables2nodes = self.get_variables()
+        for node_name in self.name2node_map:
+            parts = node_name.split("+")
+            if len(parts) <= 1:
+                continue
+            for part in parts:
+                part2loss.setdefault(part, 0.0)
+                orig_part_node = orig_name2node_map[part]
+                for edge in orig_part_node.out_edges:
+                    dest_union = part2node[edge.dest]
+                    abstract_edge = nodes2edge_between_map[(node_name,
+                                                            dest_union)]
+                    diff = abs(edge.weight - abstract_edge.weight)
+                    node_var = nodes2variables.get(node_name + "_f",
+                                                   nodes2variables.get(node_name + "_b",
+                                                                       nodes2variables.get(node_name)))
+                    diff *= example.get(node_var, 1.0)
+                    part2loss[part] += diff
+        return part2loss
+        
     def get_nodes2edge_between_map(self) -> Dict:
         nodes2edge_between_map = {}
         for layer in self.layers:
@@ -281,31 +307,6 @@ class Network:
                 node2layer_map[node.name] = i
         return node2layer_map
 
-    def get_layer_part2loss_map(self,
-                                orig_name2node_map:Dict,
-                                nodes2edge_between_map:Dict,
-                                example:Dict={}) -> Dict:
-        part2loss = {}
-        part2node = self.get_part2node_map()
-        nodes2variables, variables2nodes = self.get_variables()
-        for node_name in self.name2node_map:
-            parts = node_name.split("+")
-            if len(parts) <= 1:
-                continue
-            for part in parts:
-                part2loss.setdefault(part, 0.0)
-                orig_part_node = orig_name2node_map[part]
-                for edge in orig_part_node.out_edges:
-                    dest_union = part2node[edge.dest]
-                    abstract_edge = nodes2edge_between_map[(node_name,
-                                                            dest_union)]
-                    diff = abs(edge.weight - abstract_edge.weight)
-                    node_var = nodes2variables.get(node_name + "_f",
-                                                   nodes2variables.get(node_name + "_b",
-                                                                       nodes2variables.get(node_name)))
-                    diff *= example.get(node_var, 1.0)
-                    part2loss[part] += diff
-        return part2loss
 
     @staticmethod
     def get_next_nodes(current_values:List) -> List:
@@ -343,7 +344,7 @@ class Network:
         nodes2variables = {}
         variables2nodes = {}
         var_index = 0
-        is_acas_xu_conjunction = property_type == "acas_xu_conjunction"
+        is_acas_xu_conjunction = (property_type == "acas_xu_conjunction")
         # is_adversarial = property_type == "adversarial"
         for l_index, layer in enumerate(self.layers):
             for node in layer.nodes:

@@ -258,6 +258,9 @@ void ResultView::showNetwork(QJsonObject *jsonObj) {
             }
         }
     }
+    this->resultGraph->showMaximized();
+    QPixmap screen = QPixmap::grabWidget(this->resultGraph);
+    screen.save("./page.png");
 
 }
 // huangxiaoze--end

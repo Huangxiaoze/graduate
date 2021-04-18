@@ -16,7 +16,7 @@ def union_couple_of_nodes(network: Network, node_1: ARNode, node_2: ARNode)\
     :param node_1: ARNode
     :param node_2: ARNode
     """
-    # union two node of diferrent types is forbidden
+    # union two node of different types is forbidden
     assert node_1.ar_type == node_2.ar_type
     layer_index = None
     try:

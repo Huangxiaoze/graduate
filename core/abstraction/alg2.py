@@ -18,7 +18,7 @@ def heuristic_abstract_alg2(
         verbose:bool=VERBOSE
 ) -> Network:
     """
-    abstract a given network according to alg 2 method in the paper
+    abstract a given network according to alg2 method in the paper
     the abstraction is done on @sequence_length pairs that are chosen a.t alg2
     in the paper, those with the biggest difference which is the smallest
     :param network: Network represent the network
@@ -44,18 +44,18 @@ def heuristic_abstract_alg2(
         loop_iterations += 1
         # the minimal value over all max differences between input edges' weights of couples of nodes of same ar_type.
         union_pairs = []
-        for i, layer in enumerate(network.layers[FIRST_ABSTRACT_LAYER:-1]):
+        for i, layer in enumerate(network.layers[FIRST_ABSTRACT_LAYER:-1]): # 遍历隐藏层
             layer_index = i + FIRST_ABSTRACT_LAYER
             prev_layer = network.layers[layer_index - 1]
-            layer_couples = layer.get_couples_of_same_ar_type()
+            layer_couples = layer.get_couples_of_same_ar_type() 
             # calc max difference between input edges' weights of couples
             for n1, n2 in layer_couples:
                 max_diff_n1_n2 = INT_MIN
                 for prev_node in prev_layer.nodes:
                     in_edge_n1 = nodes2edge_between_map.get((prev_node.name, n1.name), None)
-                    a = 0 if in_edge_n1 is None else in_edge_n1.weight
+                    a = (0 if in_edge_n1 is None else in_edge_n1.weight)
                     in_edge_n2 = nodes2edge_between_map.get((prev_node.name, n2.name), None)
-                    b = 0 if in_edge_n2 is None else in_edge_n2.weight
+                    b = (0 if in_edge_n2 is None else in_edge_n2.weight)
                     if abs(a - b) > max_diff_n1_n2:
                         max_diff_n1_n2 = abs(a - b)
                 union_pairs.append(([n1, n2], max_diff_n1_n2))

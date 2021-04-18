@@ -91,7 +91,7 @@ def is_completely_abstract_layer(layer):
 #     print(f"full abstraction time={time.time()-t0}")
 #     return network
 
-
+# completely abstract network, it will only include four neurons in each hidden layers 
 def abstract_network(
         network:Network,
         do_preprocess:bool=True,
@@ -113,15 +113,15 @@ def abstract_network(
         for part in next_layer_part2union.keys():
             del network.name2node_map[part]
         network.generate_name2node_map()
-        # print (i)
-        if visualize:
-            title = "after layer {} test_abstraction".format(i)
-            visualize_network(network_layers=network.layers,
-                              title=title,
-                              next_layer_part2union=next_layer_part2union,
-                              debug=False)
-        if verbose:
-            debug_print("net after abstract {}'th layer:".format(i))
-            print(network)
+        # # print (i)
+        # if visualize:
+        #     title = "after layer {} test_abstraction".format(i)
+        #     visualize_network(network_layers=network.layers,
+        #                       title=title,
+        #                       next_layer_part2union=next_layer_part2union,
+        #                       debug=False)
+        # if verbose:
+        #     debug_print("net after abstract {}'th layer:".format(i))
+        #     print(network)
     finish_abstraction(network, next_layer_part2union, verbose=verbose)
     return network
